@@ -1,13 +1,39 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
-function Login() {
+function Login({ history }) {
   const [user, setUser] = useState({
     email: '',
     password: '',
     isDisabled: true,
   });
 
+  const handleChange = ({ target }) => {
+    const { value, name } = target;
+    setUser({ ...user, [name]: value });
+  };
+
+  const saveKeys = () => {
+    if (!localStorage.getItem('user')) localStorage.setItem('user', '');
+    if (!localStorage.getItem('mealsToken')) localStorage.setItem('mealsToken', '');
+    if (!localStorage
+      .getItem('cocktailsToken')) localStorage.setItem('cocktailsToken', '');
+  };
+
+  const setKeys = () => {
+    localStorage.setItem('user', JSON.stringify({ email: user.email }));
+    localStorage.setItem('mealsToken', JSON.stringify('1'));
+    localStorage.setItem('cocktailsToken', JSON.stringify('1'));
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    history.push('/foods');
+    setKeys();
+  };
+
   useEffect(() => {
+    saveKeys();
     const verifyInputs = () => {
       const { email, password } = user;
       const verifyEmail = (/\S+@\S+\.\S+/).test(email);
@@ -24,13 +50,8 @@ function Login() {
     verifyInputs();
   }, [user.email, user.password]);
 
-  const handleChange = ({ target }) => {
-    const { value, name } = target;
-    setUser({ ...user, [name]: value });
-  };
-
   return (
-    <form>
+    <form onSubmit={ onSubmit }>
       <h1>Login</h1>
       <label htmlFor="email-input">
         <input
@@ -60,15 +81,20 @@ function Login() {
       </label>
 
       <button
-        type="button"
+        type="submit"
         data-testid="login-submit-btn"
         disabled={ user.isDisabled }
-        // onClick={ handleClickSubmit }
       >
         Entrar
       </button>
     </form>
   );
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default Login;
