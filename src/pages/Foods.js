@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 
-function Foods({ location: { pathname } }) {
+function Foods({ location }) {
   return (
     <div>
-      {pathname === '/foods' && <Header title="Foods" />}
+      {location.pathname === '/foods' && <Header title="Foods" />}
     </div>
 
   );
