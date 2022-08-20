@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import validator from 'email-validator';
 
 function Login({ history }) {
   const [user, setUser] = useState({
     email: '',
     password: '',
-    isDisabled: true,
   });
+  const [btnControl, setBtnControl] = useState(true);
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -22,8 +23,8 @@ function Login({ history }) {
 
   const setKeys = () => {
     localStorage.setItem('user', JSON.stringify({ email: user.email }));
-    localStorage.setItem('mealsToken', JSON.stringify('1'));
-    localStorage.setItem('cocktailsToken', JSON.stringify('1'));
+    localStorage.setItem('mealsToken', JSON.stringify(1));
+    localStorage.setItem('cocktailsToken', JSON.stringify(1));
   };
 
   const onSubmit = (e) => {
@@ -34,20 +35,14 @@ function Login({ history }) {
 
   useEffect(() => {
     saveKeys();
-    const verifyInputs = () => {
-      const { email, password } = user;
-      const verifyEmail = (/\S+@\S+\.\S+/).test(email);
 
-      const passwordMinLength = 6;
-      const verifyPassword = password.length > passwordMinLength;
-
-      if (verifyEmail && verifyPassword) {
-        setUser({ ...user, isDisabled: false });
-      } else {
-        setUser({ ...user, isDisabled: true });
-      }
-    };
-    verifyInputs();
+    const passwordMinLength = 6;
+    const verifyPassword = user.password.length > passwordMinLength;
+    if (validator.validate(user.email) && verifyPassword) {
+      setBtnControl(false);
+    } else {
+      setBtnControl(true);
+    }
   }, [user.email, user.password]);
 
   return (
@@ -83,7 +78,7 @@ function Login({ history }) {
       <button
         type="submit"
         data-testid="login-submit-btn"
-        disabled={ user.isDisabled }
+        disabled={ btnControl }
       >
         Entrar
       </button>

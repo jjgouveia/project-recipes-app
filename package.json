@@ -8,6 +8,7 @@
   "dependencies": {
     "bootstrap": "^4.5.3",
     "clipboard-copy": "^4.0.1",
+    "email-validator": "^2.0.4",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-bootstrap": "^2.4.0",
@@ -46,7 +47,7 @@
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
     "clipboardy": "^2.1.0",
-    "cypress": "^9.7.0",
+    "cypress": "^7.6.0",
     "cypress-multi-reporters": "^1.4.0",
     "eslint": "^7.32.0",
     "eslint-config-trybe-frontend": "1.2.3",
