@@ -1,27 +1,32 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
-function Header() {
+function Header({ title }) {
   return (
     <header>
       <img
         data-testid="profile-top-btn"
         src={ profileIcon }
-        alt="profile-icon"
+        alt="Ícone do perfil"
       />
-
-      <img
-        data-testid="search-top-btn"
+      {(title !== 'Profile'
+      && title !== 'Done Recipes'
+      && title !== 'Favorite Recipes')
+      && <img
         src={ searchIcon }
-        alt="profile-icon"
-      />
-
-      <h1 data-testid="page-title">Title</h1>
-
+        data-testid="search-top-btn"
+        alt="Ícone de pesquisa"
+      />}
+      <h1 data-testid="page-title">{title}</h1>
     </header>
 
   );
 }
 
 export default Header;
+
+Header.propTypes = {
+  title: PropTypes.string,
+}.isRequired;
