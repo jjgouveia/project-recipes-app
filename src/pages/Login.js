@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'email-validator';
+import saveKeys from '../services/saveKeys';
+import setKeys from '../services/setKeys';
 
 function Login({ history }) {
   const [user, setUser] = useState({
@@ -14,28 +16,14 @@ function Login({ history }) {
     setUser({ ...user, [name]: value });
   };
 
-  const saveKeys = () => {
-    if (!localStorage.getItem('user')) localStorage.setItem('user', '');
-    if (!localStorage.getItem('mealsToken')) localStorage.setItem('mealsToken', '');
-    if (!localStorage
-      .getItem('cocktailsToken')) localStorage.setItem('cocktailsToken', '');
-  };
-
-  const setKeys = () => {
-    localStorage.setItem('user', JSON.stringify({ email: user.email }));
-    localStorage.setItem('mealsToken', JSON.stringify(1));
-    localStorage.setItem('cocktailsToken', JSON.stringify(1));
-  };
-
   const onSubmit = (e) => {
     e.preventDefault();
     history.push('/foods');
-    setKeys();
+    setKeys(user.email);
   };
 
   useEffect(() => {
     saveKeys();
-
     const passwordMinLength = 6;
     const verifyPassword = user.password.length > passwordMinLength;
     if (validator.validate(user.email) && verifyPassword) {
