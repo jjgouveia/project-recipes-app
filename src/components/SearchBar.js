@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import getFoodAPI from '../services/getFoodAPI';
+import { useHistory } from 'react-router-dom';
+import recipeAPI from '../services/recipeAPI';
 
 export default function SearchBar() {
+  const history = useHistory();
+  const { location: { pathname } } = history;
   const [searchTextInput, setSearchTextInput] = useState({
     text: '',
     textLength: 0,
@@ -23,7 +26,7 @@ export default function SearchBar() {
     if (radioValue === 'first-letter' && searchTextInput.textLength > MAX_LENGTH) {
       global.alert('Your search must have only 1 (one) character');
     } else {
-      await getFoodAPI(radioValue, searchTextInput.text);
+      await recipeAPI(radioValue, searchTextInput.text, pathname);
     }
   };
 
@@ -44,6 +47,7 @@ export default function SearchBar() {
           type="radio"
           name="search-radio"
           value="ingredient"
+          id="ingredient-search-radio"
           data-testid="ingredient-search-radio"
           onChange={ handleSearch }
         />
@@ -54,6 +58,7 @@ export default function SearchBar() {
           type="radio"
           name="search-radio"
           value="name"
+          id="name-search-radio"
           data-testid="name-search-radio"
           onChange={ handleSearch }
         />
@@ -64,6 +69,7 @@ export default function SearchBar() {
           type="radio"
           name="search-radio"
           value="first-letter"
+          id="first-letter-search-radio"
           data-testid="first-letter-search-radio"
           onChange={ handleSearch }
         />

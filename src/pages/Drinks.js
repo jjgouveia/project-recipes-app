@@ -5,7 +5,7 @@ import Header from '../components/Header';
 export default function Drinks({ location: { pathname } }) {
   return (
     <div>
-      {pathname === '/drinks' && <Header title="Drinks" />}
+      {pathname === '/drinks' && <Header title="Drinks" /> }
     </div>
   );
 }
