@@ -4,11 +4,17 @@ import AppContext from './AppContext';
 
 function AppProvider({ children }) {
   const [login, setLogin] = useState('');
+  const [apiResponse, setApiResponse] = useState({
+    meals: [],
+    drinks: [],
+  });
   return (
     <AppContext.Provider
       value={ {
         login,
         setLogin,
+        apiResponse,
+        setApiResponse,
       } }
     >
       {children}
