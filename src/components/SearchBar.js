@@ -26,7 +26,13 @@ export default function SearchBar() {
     if (radioValue === 'first-letter' && searchTextInput.textLength > MAX_LENGTH) {
       global.alert('Your search must have only 1 (one) character');
     } else {
-      await recipeAPI(radioValue, searchTextInput.text, pathname);
+      const response = await recipeAPI(radioValue, searchTextInput.text, pathname);
+      if (pathname === '/foods' && await response.meals.length === 1) {
+        history.push(`/foods/${response.meals[0].idMeal}`);
+      }
+      if (pathname === '/drinks' && await response.drinks.length === 1) {
+        history.push(`/drinks/${response.drinks[0].idDrink}`);
+      }
     }
   };
 
