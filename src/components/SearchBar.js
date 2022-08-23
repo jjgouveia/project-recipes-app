@@ -37,14 +37,19 @@ export default function SearchBar() {
   };
 
   useEffect(() => {
-    if (pathname === '/foods' && apiResponse.meals.length === 1) {
-      history.push(`/foods/${apiResponse.meals[0].idMeal}`);
-    } else if (pathname === '/foods' && apiResponse.meals.length > 1) {
-      setRenderCardsList(true);
-    } else if (pathname === '/drinks' && apiResponse.drinks.length === 1) {
-      history.push(`/drinks/${apiResponse.drinks[0].idDrink}`);
-    } else if (pathname === '/drinks' && apiResponse.drinks.length > 1) {
-      setRenderCardsList(true);
+    if (apiResponse.meals || apiResponse.drinks) {
+      console.log(apiResponse);
+      if (pathname === '/foods' && apiResponse.meals.length === 1) {
+        history.push(`/foods/${apiResponse.meals[0].idMeal}`);
+      } else if (pathname === '/foods' && apiResponse.meals.length > 1) {
+        setRenderCardsList(true);
+      } else if (pathname === '/drinks' && apiResponse.drinks.length === 1) {
+        history.push(`/drinks/${apiResponse.drinks[0].idDrink}`);
+      } else if (pathname === '/drinks' && apiResponse.drinks.length > 1) {
+        setRenderCardsList(true);
+      }
+    } else {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
   }, [apiResponse]);
 
