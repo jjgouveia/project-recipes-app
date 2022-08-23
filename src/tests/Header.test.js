@@ -9,13 +9,16 @@ describe('Componente Header', () => {
         const { history } = renderWithRouter(<Header />);
         history.push('/foods');
     
-        const SEARCH_BTN = screen.getByTestId('search-top-btn');
+        const SEARCH_BTN = screen.getByRole('img', {
+          name: /ícone de pesquisa/i
+        });
+
         userEvent.click(SEARCH_BTN);
     
         const SEARCH_BAR = screen.getByTestId('search-input');
         expect(SEARCH_BAR).toBeInTheDocument();
-    
+
         userEvent.click(SEARCH_BTN);
-        expect(SEARCH).not.toBeInTheDocument();
+        expect(SEARCH_BAR).not.toBeInTheDocument();
       });
  })

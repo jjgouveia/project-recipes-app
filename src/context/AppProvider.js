@@ -8,6 +8,7 @@ function AppProvider({ children }) {
     meals: [],
     drinks: [],
   });
+
   return (
     <AppContext.Provider
       value={ {

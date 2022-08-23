@@ -38,7 +38,6 @@ export default function SearchBar() {
 
   useEffect(() => {
     if (apiResponse.meals || apiResponse.drinks) {
-      console.log(apiResponse);
       if (pathname === '/foods' && apiResponse.meals.length === 1) {
         history.push(`/foods/${apiResponse.meals[0].idMeal}`);
       } else if (pathname === '/foods' && apiResponse.meals.length > 1) {
@@ -51,7 +50,7 @@ export default function SearchBar() {
     } else {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
-  }, [apiResponse]);
+  }, [apiResponse, history, pathname]);
 
   return (
     <>

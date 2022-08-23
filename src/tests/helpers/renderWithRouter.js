@@ -2,6 +2,9 @@ import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 import { render } from '@testing-library/react';
+import AppProvider from '../../context/AppProvider';
+
+
 
 function withRouter(component, history) {
   return (
@@ -19,7 +22,7 @@ export default function renderWithRouter(
   } = {},
 ) {
   return {
-    ...render(withRouter(component, history)),
+    ...render(withRouter(<AppProvider>{component}</AppProvider>, history)),
     history,
   };
 }
