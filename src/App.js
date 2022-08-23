@@ -8,6 +8,7 @@ import FavoriteRecipes from './pages/FavoriteRecipes';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from './pages/Profile';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/favorite-recipes" component={ FavoriteRecipes } />
         </Switch>
       </BrowserRouter>
+      <Footer />
     </div>
   );
 }
