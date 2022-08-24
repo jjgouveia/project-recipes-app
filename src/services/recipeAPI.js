@@ -16,8 +16,8 @@ const recipeAPI = async (endpointType, inputText, pathname) => {
     const response = await request.json();
 
     if (pathname === '/foods'
-      ? response.meals?.lenght === 0 || response.meals === null
-      : response.drinks?.lenght === 0 || response.drinks === null) {
+      ? response.meals?.length === 0 || response.meals === null
+      : response.drinks?.length === 0 || response.drinks === null) {
       return (
         global.alert('Sorry, we haven\'t found any recipes for these filters.'),
         {
