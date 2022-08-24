@@ -19,11 +19,11 @@ function Login({ history }) {
   const onSubmit = (e) => {
     e.preventDefault();
     history.push('/foods');
+    saveKeys();
     setKeys(user.email);
   };
 
   useEffect(() => {
-    saveKeys();
     const passwordMinLength = 6;
     const verifyPassword = user.password.length > passwordMinLength;
     if (validator.validate(user.email) && verifyPassword) {
