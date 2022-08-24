@@ -4,8 +4,9 @@ import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 import Recipes from '../components/Recipes';
+import Footer from '../components/Footer';
 
-function Foods({ location }) {
+function Foods({ location: { pathname } }) {
   const { apiResponse, setApiResponse } = useContext(AppContext);
   const { meals } = apiResponse;
   useEffect(() => {
@@ -24,11 +25,12 @@ function Foods({ location }) {
   return (
     <>
       <div>
-        {location.pathname === '/foods' && <Header title="Foods" />}
+        {pathname === '/foods' && <Header title="Foods" />}
       </div>
       <div>
         <Recipes pathname="/foods" apiResponse={ apiResponse } />
       </div>
+      { pathname === '/foods' && <Footer />}
     </>
 
   );

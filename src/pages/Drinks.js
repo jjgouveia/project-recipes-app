@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 import Recipes from '../components/Recipes';
+import Footer from '../components/Footer';
 
 export default function Drinks({ location: { pathname } }) {
   const { apiResponse, setApiResponse } = useContext(AppContext);
@@ -28,6 +29,7 @@ export default function Drinks({ location: { pathname } }) {
       <div>
         <Recipes pathname="/drinks" apiResponse={ apiResponse } />
       </div>
+      { pathname === '/drinks' && <Footer />}
     </>
   );
 }
