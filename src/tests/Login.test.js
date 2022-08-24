@@ -1,12 +1,12 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 import App from '../App';
-const saveKeys = require('../services/setKeys')
+import renderWithRouter from './helpers/renderWithRouter'
 
 describe('Testa a página de Login e seu comportamento', ()=> {
   it('Testa se existe um elemento com o título "Login" na tela', () => {
-      render(<App />);
+      renderWithRouter(<App />);
       const linkElement = screen.getByRole('heading', {
         name: /login/i,
         level: 1,
@@ -14,7 +14,7 @@ describe('Testa a página de Login e seu comportamento', ()=> {
       expect(linkElement).toBeInTheDocument();
     });
     it('Testa se é possível digitar no campo de email e senha ', () => {
-      render(<App/>);
+      renderWithRouter(<App/>);
       const EMAIL = screen.getByTestId('email-input');
       userEvent.type(EMAIL, 'teste@teste.com');
       expect(EMAIL).toHaveDisplayValue('teste@teste.com')
@@ -32,7 +32,7 @@ describe('Testa a página de Login e seu comportamento', ()=> {
       expect(BTN).toBeEnabled();
     });
     it('Testa se é possível fazer login na página', () => {
-      render(<App/>);
+      renderWithRouter(<App/>);
       const EMAIL = screen.getByTestId('email-input');
       userEvent.type(EMAIL, 'teste@teste.com');
       expect(EMAIL).toHaveDisplayValue('teste@teste.com')

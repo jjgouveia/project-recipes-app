@@ -5,10 +5,10 @@ import Foods from './pages/Foods';
 import Drinks from './pages/Drinks';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
+import Footer from './components/Footer';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from './pages/Profile';
-import Footer from './components/Footer';
 
 function App() {
   return (

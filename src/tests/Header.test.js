@@ -6,8 +6,7 @@ import Header from "../components/Header";
 
 describe('Componente Header', () => { 
     it('Verifica o comportamento do botão e da barra de pesquisa', () => {
-        const { history } = renderWithRouter(<Header />);
-        history.push('/foods');
+        renderWithRouter(<Header />, '/foods');
     
         const SEARCH_BTN = screen.getByRole('img', {
           name: /ícone de pesquisa/i
