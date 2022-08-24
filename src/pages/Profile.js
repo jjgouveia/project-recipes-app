@@ -3,12 +3,14 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 export default function Profile() {
-  const email = 'teste';
+  const emailObj = localStorage.getItem('user');
+  const user = JSON.parse(emailObj);
+
   return (
     <div>
       <Header title="Profile" />
       <div>
-        <h2 data-testid="profile-email">{email}</h2>
+        <h2 data-testid="profile-email">{user.email}</h2>
         <button type="button" data-testid="profile-done-btn">Done Recipes</button>
         <button type="button" data-testid="profile-favorite-btn">Favorite Recipes</button>
         <button type="button" data-testid="profile-logout-btn">Logout</button>
