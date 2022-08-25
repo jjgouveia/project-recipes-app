@@ -1,38 +1,100 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Card from './Card';
 import AppContext from '../context/AppContext';
+import recipeAPI from '../services/recipeAPI';
 
 const Recipes = ({ apiResponse, pathname }) => {
   const maxItens = 12;
   const maxCategory = 5;
 
-  const { categoriesFoods, categoriesDrinks } = useContext(AppContext);
+  const { categoriesFoods, categoriesDrinks, setApiResponse } = useContext(AppContext);
 
-  console.log(categoriesFoods);
+  const fetchFood = async (category) => {
+    const request = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
+    const json = await request.json();
+    setApiResponse(json);
+  };
+
+  const fetchDrinks = async (category) => {
+    const request = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
+    const json = await request.json();
+    setApiResponse(json);
+  };
+
+  console.log(apiResponse);
+
+  const filterFood = (e) => {
+    fetchFood(e.target.innerText);
+    const filteredArray = apiResponse.meals.filter((food) => (
+      food.strCategory === e.target.innerText));
+    setApiResponse((prevResponse) => ({
+      ...prevResponse,
+      meals: filteredArray,
+    }));
+  };
+
+  const filterDrinks = (e) => {
+    fetchDrinks(e.target.innerText);
+    const filteredArray = apiResponse.drinks.filter((food) => (
+      food.strCategory === e.target.innerText));
+    setApiResponse((prevResponse) => ({
+      ...prevResponse,
+      drinks: filteredArray,
+    }));
+  };
+
+  const resetFilters = async () => {
+    if (pathname === '/foods') {
+      const request = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      const json = await request.json();
+      setApiResponse(json);
+    } else {
+      const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+      const json = await request.json();
+      setApiResponse(json);
+    }
+  };
+
   return (
     <div>
       <div>
-        { pathname === '/foods'
-          ? categoriesFoods.slice(0, maxCategory).map((food) => (
-            <button
-              data-testid={ `${food.strCategory}-category-filter` }
-              type="button"
-              key={ food.strCategory }
-            >
-              { food.strCategory}
-            </button>))
-          : categoriesDrinks.slice(0, maxCategory).map((drink) => (
-            <button
-              data-testid={ `${drink.strCategory}-category-filter` }
-              type="button"
-              key={ drink.strCategory }
-            >
-              { drink.strCategory}
-            </button>
-          ))}
-
+        {
+          pathname === '/foods' ? (
+            categoriesFoods.slice(0, maxCategory).map((food) => (
+              <div key={ food.strCategory }>
+                <button
+                  data-testid={ `${food.strCategory}-category-filter` }
+                  type="button"
+                  key={ food.strCategory }
+                  onClick={ filterFood }
+                >
+                  { food.strCategory}
+                </button>
+              </div>
+            ))) : (
+            categoriesDrinks.slice(0, maxCategory).map((drink) => (
+              <div key={ drink.strCategory }>
+                <button
+                  data-testid={ `${drink.strCategory}-category-filter` }
+                  type="button"
+                  key={ drink.strCategory }
+                  onClick={ filterDrinks }
+                >
+                  { drink.strCategory}
+                </button>
+              </div>
+            )))
+        }
+        <button
+          data-testid="All-category-filter"
+          type="button"
+          onClick={ resetFilters }
+        >
+          All
+        </button>
       </div>
+
       <div>
         { pathname === '/foods' ? apiResponse.meals
           .slice(0, maxItens).map((meal, index) => (

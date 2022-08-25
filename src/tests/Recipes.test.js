@@ -5,7 +5,7 @@ import renderWithRouter from './helpers/renderWithRouter'
 
 describe('Testando o component Recipes', () => {
     beforeEach(() => {
-        global.alert = jest.fn();
+        
     });
     
     it('Verificando os bottons na tela', () => {
