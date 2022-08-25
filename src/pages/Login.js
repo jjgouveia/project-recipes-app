@@ -23,7 +23,9 @@ function Login({ history }) {
     history.push('/foods');
     saveKeys();
     setKeys(user.email);
-    setLogin(user.email);
+    const emailObj = localStorage.getItem('user');
+    const userStorage = JSON.parse(emailObj);
+    setLogin(userStorage.email);
   };
 
   useEffect(() => {
