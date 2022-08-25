@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from './AppContext';
-import { apiCategoryDrinks, apiCategoryFood } from '../services/apiCategors';
+import { apiCategoryDrinks, apiCategoryFood } from '../services/categoriesAPI';
 
 function AppProvider({ children }) {
   const [login, setLogin] = useState('');
