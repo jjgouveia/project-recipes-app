@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 
 function Foods({ location }) {
+  // console.log(location);
   const { apiResponse } = useContext(AppContext);
   const { meals } = apiResponse;
   if (meals.length === 1) return <Redirect to={ `/foods/${meals[0].idMeal}` } />;
