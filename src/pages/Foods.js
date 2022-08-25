@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 
 function Foods({ location: { pathname } }) {
   const { apiResponse, setApiResponse } = useContext(AppContext);
-
+  const [filtersOn, setFiltersOn] = useState(false);
   const { meals } = apiResponse;
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -18,8 +18,9 @@ function Foods({ location: { pathname } }) {
     };
     fetchRecipes();
   }, [setApiResponse]);
+  console.log(apiResponse);
 
-  if (meals.length === 1) {
+  if (meals.length === 1 && !filtersOn) {
     return <Redirect to={ `/foods/${meals[0].idMeal}` } />;
   }
 
@@ -29,7 +30,11 @@ function Foods({ location: { pathname } }) {
         {pathname === '/foods' && <Header title="Foods" />}
       </div>
       <div>
-        <Recipes pathname="/foods" apiResponse={ apiResponse } />
+        <Recipes
+          setFiltersOn={ setFiltersOn }
+          pathname="/foods"
+          apiResponse={ apiResponse }
+        />
       </div>
       { pathname === '/foods' && <Footer />}
     </>
