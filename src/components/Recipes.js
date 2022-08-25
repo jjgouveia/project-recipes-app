@@ -1,14 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import Card from './Card';
 import AppContext from '../context/AppContext';
-import recipeAPI from '../services/recipeAPI';
 
 const Recipes = ({ apiResponse, pathname }) => {
   const maxItens = 12;
   const maxCategory = 5;
 
-  const { categoriesFoods, categoriesDrinks, setApiResponse } = useContext(AppContext);
+  const {
+    categoriesFoods,
+    categoriesDrinks,
+    setApiResponse } = useContext(AppContext);
+  const [loading, setLoading] = useState(true);
+
+  const resetFilters = async () => {
+    if (pathname === '/foods') {
+      const request = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      const json = await request.json();
+      setApiResponse(json);
+    } else {
+      const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+      const json = await request.json();
+      setApiResponse(json);
+    }
+  };
 
   const fetchFood = async (category) => {
     const request = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
@@ -28,31 +43,32 @@ const Recipes = ({ apiResponse, pathname }) => {
     fetchFood(e.target.innerText);
     const filteredArray = apiResponse.meals.filter((food) => (
       food.strCategory === e.target.innerText));
-    setApiResponse((prevResponse) => ({
-      ...prevResponse,
-      meals: filteredArray,
-    }));
+    if (loading) {
+      setApiResponse((prevResponse) => ({
+        ...prevResponse,
+        meals: filteredArray,
+      }));
+      setLoading(!loading);
+    } if (loading === false) {
+      resetFilters();
+      setLoading(!loading);
+    }
   };
 
   const filterDrinks = (e) => {
     fetchDrinks(e.target.innerText);
     const filteredArray = apiResponse.drinks.filter((food) => (
       food.strCategory === e.target.innerText));
-    setApiResponse((prevResponse) => ({
-      ...prevResponse,
-      drinks: filteredArray,
-    }));
-  };
-
-  const resetFilters = async () => {
-    if (pathname === '/foods') {
-      const request = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-      const json = await request.json();
-      setApiResponse(json);
-    } else {
-      const request = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-      const json = await request.json();
-      setApiResponse(json);
+    if (loading) {
+      setApiResponse((prevResponse) => ({
+        ...prevResponse,
+        drinks: filteredArray,
+      }));
+      setLoading(!loading);
+    }
+    if (loading === false) {
+      resetFilters();
+      setLoading(!loading);
     }
   };
 

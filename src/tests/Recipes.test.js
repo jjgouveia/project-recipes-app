@@ -8,7 +8,7 @@ describe('Testando o component Recipes', () => {
         
     });
     
-    it('Verificando os bottons na tela', () => {
+    it('Verificando os buttons na tela', () => {
         renderWithRouter(<Recipes />, '/foods');
         const buttons = screen.getByRole('button', {name: /beef/i})
         expect(buttons).toBeInTheDocument()
