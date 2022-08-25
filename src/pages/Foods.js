@@ -19,7 +19,7 @@ function Foods({ location: { pathname } }) {
   }, [setApiResponse]);
   console.log(apiResponse);
 
-  if (apiResponse.length === 1) {
+  if (meals.length === 1) {
     return <Redirect to={ `/foods/${meals[0].idMeal}` } />;
   }
 
