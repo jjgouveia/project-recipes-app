@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Card from './Card';
 import AppContext from '../context/AppContext';
 
-const Recipes = ({ apiResponse, pathname }) => {
+const Recipes = ({ apiResponse, pathname, setFiltersOn }) => {
   const maxItens = 12;
   const maxCategory = 5;
 
@@ -40,6 +40,7 @@ const Recipes = ({ apiResponse, pathname }) => {
   console.log(apiResponse);
 
   const filterFood = (e) => {
+    setFiltersOn(true);
     fetchFood(e.target.innerText);
     const filteredArray = apiResponse.meals.filter((food) => (
       food.strCategory === e.target.innerText));
