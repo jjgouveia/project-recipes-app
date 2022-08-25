@@ -6,10 +6,14 @@ export default function Footer() {
   return (
     <footer data-testid="footer" className="footer">
       <div>
-        <img src={ mealIcon } alt="meal" data-testid="food-bottom-btn" />
+        <a href="/foods" data-testid="food-bottom-btn" src={ mealIcon }>
+          <img src={ mealIcon } alt="meal icon" />
+        </a>
       </div>
       <div>
-        <img src={ drinkIcon } alt="drink" data-testid="drinks-bottom-btn" />
+        <a href="/drinks" data-testid="drinks-bottom-btn" src={ drinkIcon }>
+          <img alt="drink icon" src={ drinkIcon } />
+        </a>
       </div>
     </footer>
   );

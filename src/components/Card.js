@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function Cards({ type, index, pathname }) {
+function Card({ type, index, pathname }) {
   const { strMeal, strDrink, idMeal, idDrink, strMealThumb, strDrinkThumb } = type;
   return (
     <div>
@@ -26,8 +26,8 @@ function Cards({ type, index, pathname }) {
   );
 }
 
-export default Cards;
+export default Card;
 
-Cards.propTypes = {
+Card.propTypes = {
   type: PropTypes.shape([]),
 }.isRequired;

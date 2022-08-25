@@ -1,27 +1,37 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Card from '../components/Card';
 import Header from '../components/Header';
 import AppContext from '../context/AppContext';
+import Recipes from '../components/Recipes';
+import Footer from '../components/Footer';
 
-function Foods({ location }) {
-  // console.log(location);
-  const { apiResponse } = useContext(AppContext);
+function Foods({ location: { pathname } }) {
+  const { apiResponse, setApiResponse } = useContext(AppContext);
+
   const { meals } = apiResponse;
-  if (meals.length === 1) return <Redirect to={ `/foods/${meals[0].idMeal}` } />;
-  const maxItens = 12;
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      const request = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      const json = await request.json();
+      setApiResponse(json);
+    };
+    fetchRecipes();
+  }, [setApiResponse]);
+
+  if (meals.length === 1) {
+    return <Redirect to={ `/foods/${meals[0].idMeal}` } />;
+  }
 
   return (
     <>
       <div>
-        {location.pathname === '/foods' && <Header title="Foods" />}
+        {pathname === '/foods' && <Header title="Foods" />}
       </div>
       <div>
-        { apiResponse.meals.slice(0, maxItens).map((meal, index) => (
-          <Card type={ meal } key={ index } index={ index } pathname="/foods" />
-        ))}
+        <Recipes pathname="/foods" apiResponse={ apiResponse } />
       </div>
+      { pathname === '/foods' && <Footer />}
     </>
 
   );

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from './AppContext';
+import { apiCategoryDrinks, apiCategoryFood } from '../services/apiCategors';
 
 function AppProvider({ children }) {
   const [login, setLogin] = useState('');
@@ -9,6 +10,14 @@ function AppProvider({ children }) {
     drinks: [],
   });
 
+  const [categoriesFoods, setCategoriesFoods] = useState([]);
+  const [categoriesDrinks, setCategoriesDrinks] = useState([]);
+
+  useEffect(() => {
+    apiCategoryFood().then((response) => setCategoriesFoods(response.meals));
+    apiCategoryDrinks().then((response) => setCategoriesDrinks(response.drinks));
+  }, []);
+
   return (
     <AppContext.Provider
       value={ {
@@ -16,7 +25,10 @@ function AppProvider({ children }) {
         setLogin,
         apiResponse,
         setApiResponse,
-        // recipeAPI,
+        categoriesFoods,
+        setCategoriesFoods,
+        categoriesDrinks,
+        setCategoriesDrinks,
       } }
     >
       {children}
