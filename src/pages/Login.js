@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'email-validator';
 import saveKeys from '../services/saveKeys';
-import setKeys from '../services/setKeys';
+import { setKeys } from '../services/setKeys';
 import AppContext from '../context/AppContext';
 
 function Login({ history }) {

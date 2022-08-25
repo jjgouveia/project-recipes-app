@@ -31,6 +31,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
+import { setLocalStorageRecipeObj } from '../services/setKeys';
 
 function RecipeDetails() {
   const { id } = useParams();
@@ -41,6 +42,18 @@ function RecipeDetails() {
   const [ingredientsQntd, setIngredientsQntd] = useState([]);
   const [recomendations, setRecomendations] = useState();
   const type = location.pathname.split('/')[1];
+  const [recipeDone, setRecipeDone] = useState(false);
+  const [recipeObj, setRecipeObj] = useState({
+    id: '',
+    type: '',
+    nationality: '',
+    category: '',
+    alcoholicOrNot: '',
+    name: '',
+    image: '',
+    doneDate: '',
+    tags: [],
+  });
 
   const fetchingData = async () => {
     if (type === 'foods') {
@@ -52,8 +65,21 @@ function RecipeDetails() {
     }
   };
 
+  // se id não estiver dentro de doneRecipes setRecipeDone(false)
+
+  const verifyLocalStorage = () => {
+    const doneRecipe = [JSON.parse(localStorage.getItem('doneRecipes'))];
+    console.log(doneRecipe);
+    if (doneRecipe) {
+      const isDone = doneRecipe.some((done) => Number(done.id) === Number(id));
+      if (isDone) setRecipeDone(false);
+    }
+  };
+
   useEffect(() => {
     fetchingData();
+    setLocalStorageRecipeObj(recipeObj);
+    verifyLocalStorage();
   }, []);
 
   useEffect(() => {
@@ -165,13 +191,17 @@ function RecipeDetails() {
         </div>
 
       )}
-      <button
-        data-testid="start-recipe-btn"
-        style={ { position: 'fixed', bottom: 0 } }
-        type="button"
-      >
-        Start Recipe
-      </button>
+      {recipeDone ? ''
+        : (
+          <button
+            onClick={ () => setRecipeDone(true) }
+            data-testid="start-recipe-btn"
+            style={ { position: 'fixed', bottom: 0 } }
+            type="button"
+          >
+            Start Recipe
+          </button>
+        )}
     </div>
   );
 }
