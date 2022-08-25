@@ -29,7 +29,6 @@ function AppProvider({ children }) {
         setCategoriesFoods,
         categoriesDrinks,
         setCategoriesDrinks,
-        // recipeAPI,
       } }
     >
       {children}
