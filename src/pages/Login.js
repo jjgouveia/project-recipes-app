@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'email-validator';
 import saveKeys from '../services/saveKeys';
 import setKeys from '../services/setKeys';
-import AppContext from '../context/AppContext';
 
 function Login({ history }) {
-  const { setLogin } = useContext(AppContext);
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -23,9 +21,6 @@ function Login({ history }) {
     history.push('/foods');
     saveKeys();
     setKeys(user.email);
-    const emailObj = localStorage.getItem('user');
-    const userStorage = JSON.parse(emailObj);
-    setLogin(userStorage.email);
   };
 
   useEffect(() => {

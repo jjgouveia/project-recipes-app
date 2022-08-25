@@ -18,10 +18,27 @@ export default function Profile() {
       <div>
         <h2 data-testid="profile-email">{email}</h2>
         <a href="/done-recipes">
-          <button type="button" data-testid="profile-done-btn">Done Recipes</button>
+          <button
+            type="button"
+            data-testid="profile-done-btn"
+          >
+            Done Recipes
+          </button>
         </a>
-        <button type="button" data-testid="profile-favorite-btn">Favorite Recipes</button>
-        <button type="button" data-testid="profile-logout-btn">Logout</button>
+        <a href="/favorite-recipes">
+          <button
+            type="button"
+            data-testid="profile-favorite-btn"
+          >
+            Favorite Recipes
+          </button>
+        </a>
+        <button
+          type="button"
+          data-testid="profile-logout-btn"
+        >
+          Logout
+        </button>
       </div>
       <Footer />
     </div>
