@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 export default function Profile() {
+  const history = useHistory();
   const [email, setEmail] = useState('');
+
+  function logoutUser() {
+    localStorage.clear();
+    history.push('/');
+  }
 
   useEffect(() => {
     if (!localStorage.getItem('user')) return localStorage.setItem('user', '');
@@ -36,6 +43,7 @@ export default function Profile() {
         <button
           type="button"
           data-testid="profile-logout-btn"
+          onClick={ logoutUser }
         >
           Logout
         </button>
