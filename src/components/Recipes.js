@@ -37,7 +37,7 @@ const Recipes = ({ apiResponse, pathname, setFiltersOn }) => {
     setApiResponse(json);
   };
 
-  console.log(apiResponse);
+  // console.log(apiResponse);
 
   const filterFood = (e) => {
     setFiltersOn(true);
