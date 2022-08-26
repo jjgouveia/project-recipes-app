@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
 import { setLocalStorageRecipeObj, setLocalStorageFavorite } from '../services/setKeys';
 import shareIcon from '../images/shareIcon.svg';
-import AppContext from '../context/AppContext';
 
 const copy = require('clipboard-copy');
 
 function RecipeDetails() {
-  const { favoriteRecipe, setFavoriteRecipe } = useContext(AppContext);
+  // const [favoriteRecipe, setFavoriteRecipe] = useState({});
   const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
@@ -53,11 +52,12 @@ function RecipeDetails() {
       if (isDone) setRecipeDone(false);
     }
   };
+  console.log();
 
   const setFavRecipe = () => {
-    setFavoriteRecipe({
+    const favoriteRecipe = {
       id,
-      type,
+      type: (type === 'foods' ? 'food' : 'drink'),
       nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
       category: (type === 'foods'
         ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
@@ -65,9 +65,10 @@ function RecipeDetails() {
       name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
       image: (type === 'foods'
         ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
-    });
+    };
+    setLocalStorageFavorite(favoriteRecipe);
+    console.log(favoriteRecipe);
   };
-  console.log(favoriteRecipe);
 
   // const verifyFavoriteLocalStorage = () => {
   //   const favRecipe = [JSON.parse(localStorage.getItem('favoriteRecipes'))];
@@ -88,15 +89,20 @@ function RecipeDetails() {
     setShowCopyMsg(true);
   };
 
+  const addFavoriteRecipe = () => {
+    setFavRecipe();
+  };
+
   useEffect(() => {
     fetchingData();
     setLocalStorageRecipeObj(recipeObj);
     verifyDoneLocalStorage();
+    // setFavRecipe();
   }, []);
 
-  useEffect(() => {
-    setLocalStorageFavorite(favoriteRecipe);
-  }, [favoriteRecipe]);
+  // useEffect(() => {
+  //   setFavRecipe();
+  // }, [favoriteRecipe]);
 
   useEffect(() => {
     // console.log(recipe);
@@ -153,7 +159,7 @@ function RecipeDetails() {
             <button
               type="button"
               data-testid="favorite-btn"
-              onClick={ () => setFavRecipe() }
+              onClick={ addFavoriteRecipe }
             >
               Favoritar
 
