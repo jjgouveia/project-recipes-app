@@ -28,12 +28,13 @@
 // }
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
 import { setLocalStorageRecipeObj } from '../services/setKeys';
 
 function RecipeDetails() {
+  const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
   const [recipe, setRecipe] = useState();
@@ -74,6 +75,11 @@ function RecipeDetails() {
       const isDone = doneRecipe.some((done) => Number(done.id) === Number(id));
       if (isDone) setRecipeDone(false);
     }
+  };
+
+  const handleStartRecipe = () => {
+    setRecipeDone(true);
+    history.push(`/${type}/${id}/in-progress`);
   };
 
   useEffect(() => {
@@ -121,6 +127,8 @@ function RecipeDetails() {
               ? recipe.meals[0].strMeal
               : recipe.drinks[0].strDrink }
           />
+          <button type="button" data-testid="share-btn">Compartilhar</button>
+          <button type="button" data-testid="favorite-btn">Favoritar</button>
           <h1 data-testid="recipe-title">
             { type === 'foods'
               ? recipe.meals[0].strMeal
@@ -194,7 +202,7 @@ function RecipeDetails() {
       {recipeDone ? ''
         : (
           <button
-            onClick={ () => setRecipeDone(true) }
+            onClick={ handleStartRecipe }
             data-testid="start-recipe-btn"
             style={ { position: 'fixed', bottom: 0 } }
             type="button"
