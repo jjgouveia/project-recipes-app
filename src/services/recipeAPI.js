@@ -1,4 +1,4 @@
-const recipeAPI = async (endpointType, inputText, pathname) => {
+export const recipeAPI = async (endpointType, inputText, pathname) => {
   let endpoint = pathname === '/foods'
     ? 'https://www.themealdb.com/api/json/v1/1/' : 'https://www.thecocktaildb.com/api/json/v1/1/';
 
@@ -6,6 +6,8 @@ const recipeAPI = async (endpointType, inputText, pathname) => {
   case 'ingredient': endpoint += `filter.php?i=${inputText}`;
     break;
   case 'first-letter': endpoint += `search.php?f=${inputText}`;
+    break;
+  case 'recipe': endpoint += `lookup.php?i=${inputText}`;
     break;
   default: endpoint += `search.php?s=${inputText}`;
     break;
@@ -32,4 +34,8 @@ const recipeAPI = async (endpointType, inputText, pathname) => {
   }
 };
 
-export default recipeAPI;
+export const fetchContent = async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+};

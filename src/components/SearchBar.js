@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
-import recipeAPI from '../services/recipeAPI';
+import { recipeAPI } from '../services/recipeAPI';
 
 export default function SearchBar() {
   const { setApiResponse } = useContext(AppContext);
