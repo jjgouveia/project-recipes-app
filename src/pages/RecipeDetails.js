@@ -142,8 +142,12 @@ function RecipeDetails() {
               type="button"
               data-testid="share-btn"
             >
-              Compartilhar
+              <img
+                src={ shareIcon }
+                alt="share"
+              />
 
+              Compartilhar
             </button>
             <button
               type="button"
