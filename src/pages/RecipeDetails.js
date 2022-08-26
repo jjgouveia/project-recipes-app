@@ -43,7 +43,7 @@ function RecipeDetails() {
   const [recomendations, setRecomendations] = useState();
   const type = location.pathname.split('/')[1];
   const [recipeDone, setRecipeDone] = useState(false);
-  const [recipeObj, setRecipeObj] = useState({
+  const [recipeObj] = useState({
     id: '',
     type: '',
     nationality: '',
