@@ -1,42 +1,15 @@
-// import React, { useEffect, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
-// import { recipeAPI } from '../services/recipeAPI';
-
-// export default function RecipeDetails() {
-//   const [recipe, setRecipe] = useState({});
-//   const { location: { pathname } } = useHistory();
-//   const path = pathname.split('/');
-//   console.log(path);
-
-//   useEffect(() => {
-//     const getApiRecipe = async () => {
-//       const recipeResponse = await recipeAPI('recipe', path[2]);
-//       const getResponse = path[1] === 'foods' ? recipeResponse.meals
-//         : recipeResponse.drinks;
-//       setRecipe(getResponse);
-//     };
-//     getApiRecipe();
-//   }, []);
-
-//   console.log(recipe);
-
-//   return (
-//     <section>
-//       <h2>RecipeDetails</h2>
-//     </section>
-//   );
-// }
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
-import { setLocalStorageRecipeObj } from '../services/setKeys';
+import { setLocalStorageRecipeObj, setLocalStorageFavorite } from '../services/setKeys';
 import shareIcon from '../images/shareIcon.svg';
+import AppContext from '../context/AppContext';
 
 const copy = require('clipboard-copy');
 
 function RecipeDetails() {
+  const { favoriteRecipe, setFavoriteRecipe } = useContext(AppContext);
   const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
@@ -47,6 +20,7 @@ function RecipeDetails() {
   const [recomendations, setRecomendations] = useState();
   const type = location.pathname.split('/')[1];
   const [recipeDone, setRecipeDone] = useState(false);
+  // const [recipeFav, setRecipeFav] = useState(false);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
   const [recipeObj] = useState({
     id: '',
@@ -72,14 +46,37 @@ function RecipeDetails() {
 
   // se id não estiver dentro de doneRecipes setRecipeDone(false)
 
-  const verifyLocalStorage = () => {
+  const verifyDoneLocalStorage = () => {
     const doneRecipe = [JSON.parse(localStorage.getItem('doneRecipes'))];
-    console.log(doneRecipe);
     if (doneRecipe) {
       const isDone = doneRecipe.some((done) => Number(done.id) === Number(id));
       if (isDone) setRecipeDone(false);
     }
   };
+
+  const setFavRecipe = () => {
+    setFavoriteRecipe({
+      id,
+      type,
+      nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
+      category: (type === 'foods'
+        ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
+      alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
+      name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
+      image: (type === 'foods'
+        ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
+    });
+  };
+  console.log(favoriteRecipe);
+
+  // const verifyFavoriteLocalStorage = () => {
+  //   const favRecipe = [JSON.parse(localStorage.getItem('favoriteRecipes'))];
+  //   console.log(favRecipe);
+  //   if (favRecipe) {
+  //     const isFav = favRecipe.some((fav) => Number(fav.id) === Number(id));
+  //     if (isFav) setRecipeFav(true);
+  //   }
+  // };
 
   const handleStartRecipe = () => {
     setRecipeDone(true);
@@ -94,8 +91,12 @@ function RecipeDetails() {
   useEffect(() => {
     fetchingData();
     setLocalStorageRecipeObj(recipeObj);
-    verifyLocalStorage();
+    verifyDoneLocalStorage();
   }, []);
+
+  useEffect(() => {
+    setLocalStorageFavorite(favoriteRecipe);
+  }, [favoriteRecipe]);
 
   useEffect(() => {
     // console.log(recipe);
@@ -152,6 +153,7 @@ function RecipeDetails() {
             <button
               type="button"
               data-testid="favorite-btn"
+              onClick={ () => setFavRecipe() }
             >
               Favoritar
 
@@ -199,26 +201,6 @@ function RecipeDetails() {
               allowFullScreen
             />
           )}
-
-          {/* {type === 'foods'
-                  ? recomendations.drinks.map(
-                    (recomendation, i) => (
-                      <div key={ i }>
-                        <span data-testid={ `${i}-recomendation-card` }>
-                          {recomendation.idDrink}
-                        </span>
-                      </div>),
-                  )
-                  : recomendations.meals.map(
-                    (recomendation, i) => (
-                      <div key={ i }>
-                        <span data-testid={ `${i}-recomendation-card` }>
-                          {recomendation.idMeal}
-                        </span>
-                      </div>),
-                  )} */
-            // </div>
-          }
 
           <Carousel
             data={ type === 'foods'

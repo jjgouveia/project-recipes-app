@@ -7,3 +7,8 @@ export function setKeys(email) {
 export function setLocalStorageRecipeObj(recipeObj) {
   localStorage.setItem('doneRecipes', JSON.stringify(recipeObj));
 }
+
+export function setLocalStorageFavorite(fav) {
+  localStorage
+    .setItem('favoriteRecipes', JSON.stringify(fav));
+}

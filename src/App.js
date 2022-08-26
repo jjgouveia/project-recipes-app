@@ -9,20 +9,15 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from './pages/Profile';
 import RecipeDetails from './pages/RecipeDetails';
+import RecipeInProgress from './pages/RecipeInProgress';
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Switch>
-          <Route
-            path="/drinks/:id-da-receita/in-progress"
-            render={ (props) => <Drinks { ...props } /> }
-          />
-          <Route
-            path="/foods/:id-da-receita/in-progress"
-            render={ (props) => <Foods { ...props } /> }
-          />
+          <Route path="/drinks/:id/in-progress" component={ RecipeInProgress } />
+          <Route path="/foods/:id/in-progress" component={ RecipeInProgress } />
           <Route path="/drinks/:id" component={ RecipeDetails } />
           <Route path="/foods/:id" component={ RecipeDetails } />
           <Route exact path="/drinks" component={ Drinks } />
