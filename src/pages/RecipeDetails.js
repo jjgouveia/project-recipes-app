@@ -32,6 +32,9 @@ import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
 import { setLocalStorageRecipeObj } from '../services/setKeys';
+import shareIcon from '../images/shareIcon.svg';
+
+const copy = require('clipboard-copy');
 
 function RecipeDetails() {
   const history = useHistory();
@@ -44,6 +47,7 @@ function RecipeDetails() {
   const [recomendations, setRecomendations] = useState();
   const type = location.pathname.split('/')[1];
   const [recipeDone, setRecipeDone] = useState(false);
+  const [showCopyMsg, setShowCopyMsg] = useState(false);
   const [recipeObj] = useState({
     id: '',
     type: '',
@@ -80,6 +84,11 @@ function RecipeDetails() {
   const handleStartRecipe = () => {
     setRecipeDone(true);
     history.push(`/${type}/${id}/in-progress`);
+  };
+
+  const handleShare = () => {
+    copy(`http://localhost:3000${history.location.pathname}`);
+    setShowCopyMsg(true);
   };
 
   useEffect(() => {
@@ -127,8 +136,24 @@ function RecipeDetails() {
               ? recipe.meals[0].strMeal
               : recipe.drinks[0].strDrink }
           />
-          <button type="button" data-testid="share-btn">Compartilhar</button>
-          <button type="button" data-testid="favorite-btn">Favoritar</button>
+          <div>
+            <button
+              onClick={ handleShare }
+              type="button"
+              data-testid="share-btn"
+            >
+              Compartilhar
+
+            </button>
+            <button
+              type="button"
+              data-testid="favorite-btn"
+            >
+              Favoritar
+
+            </button>
+            {showCopyMsg && <h4>Link copied!</h4>}
+          </div>
           <h1 data-testid="recipe-title">
             { type === 'foods'
               ? recipe.meals[0].strMeal
