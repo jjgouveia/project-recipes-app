@@ -8,7 +8,6 @@ import shareIcon from '../images/shareIcon.svg';
 const copy = require('clipboard-copy');
 
 function RecipeDetails() {
-  // const [favoriteRecipe, setFavoriteRecipe] = useState({});
   const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
@@ -19,7 +18,6 @@ function RecipeDetails() {
   const [recomendations, setRecomendations] = useState();
   const type = location.pathname.split('/')[1];
   const [recipeDone, setRecipeDone] = useState(false);
-  // const [recipeFav, setRecipeFav] = useState(false);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
   const [recipeObj] = useState({
     id: '',
@@ -67,7 +65,6 @@ function RecipeDetails() {
         ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
     };
     setLocalStorageFavorite(favoriteRecipe);
-    console.log(favoriteRecipe);
   };
 
   // const verifyFavoriteLocalStorage = () => {
