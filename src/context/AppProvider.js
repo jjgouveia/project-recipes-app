@@ -9,6 +9,7 @@ function AppProvider({ children }) {
     meals: [],
     drinks: [],
   });
+  const [favoriteRecipe, setFavoriteRecipe] = useState([]);
 
   const [categoriesFoods, setCategoriesFoods] = useState([]);
   const [categoriesDrinks, setCategoriesDrinks] = useState([]);
@@ -29,6 +30,8 @@ function AppProvider({ children }) {
         setCategoriesFoods,
         categoriesDrinks,
         setCategoriesDrinks,
+        favoriteRecipe,
+        setFavoriteRecipe,
       } }
     >
       {children}

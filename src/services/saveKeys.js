@@ -7,4 +7,6 @@ export default function saveKeys() {
     .getItem('doneRecipes')) localStorage.setItem('doneRecipes', []);
   if (!localStorage
     .getItem('inProgressRecipes')) localStorage.setItem('inProgressRecipes', []);
+  if (!localStorage
+    .getItem('favoriteRecipes')) localStorage.setItem('favoriteRecipes', []);
 }
