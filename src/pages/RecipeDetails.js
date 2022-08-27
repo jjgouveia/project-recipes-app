@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
@@ -23,8 +23,7 @@ function RecipeDetails() {
   const [continueRecipe, setContinueRecipe] = useState(false);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
   const [favIcon, setFavIcon] = useState(whiteHeartIcon);
-  const [recipeObj] = useState({
-    id: '',
+  const [recipeObj] = useState({ id: '',
     type: '',
     nationality: '',
     category: '',
@@ -132,14 +131,9 @@ function RecipeDetails() {
     verifyFavoriteLocalStorage();
   }, []);
 
-  // useEffect(() => {
-  //   setLocalStorageFavorite(favoriteRecipe);
-  // }, [favoriteRecipe]);
-
   useEffect(() => {
     if (recipe === undefined || recomendations === undefined) return;
 
-    // array de ingredientes e medidas
     const maxIngredient = 20;
     const newArrI = [];
     const newArrQ = [];
