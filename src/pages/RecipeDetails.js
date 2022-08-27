@@ -110,8 +110,9 @@ function RecipeDetails() {
     history.push(`/${type}/${id}/in-progress`);
   };
   const handleShare = () => {
+    const url = window.location.href;
     setShowCopyMsg(true);
-    copy(`http://localhost:3000${history.location.pathname}`);
+    copy(`${url}`);
   };
   const addFavoriteRecipe = () => {
     setFavRecipe();
