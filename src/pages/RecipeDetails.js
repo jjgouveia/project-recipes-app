@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
 import { setLocalStorageRecipeObj, setLocalStorageFavorite } from '../services/setKeys';
 import shareIcon from '../images/shareIcon.svg';
-import AppContext from '../context/AppContext';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
@@ -23,6 +25,7 @@ function RecipeDetails() {
   const [recipeDone, setRecipeDone] = useState(false);
   const [continueRecipe, setContinueRecipe] = useState(false);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
+  const [favIcon, setFavIcon] = useState(whiteHeartIcon);
   const [recipeObj] = useState({
     id: '',
     type: '',
@@ -54,19 +57,38 @@ function RecipeDetails() {
     }
   }, [id]);
 
-  const setFavRecipe = () => {
-    setFavoriteRecipe({
-      id,
-      type,
-      nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
-      category: (type === 'foods'
-        ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
-      alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
-      name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
-      image: (type === 'foods'
-        ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
-    });
+  const verifyFavoriteLocalStorage = () => {
+    const favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    const isFavorite = favorites.find(((favorite) => favorite.id === id));
+    if (isFavorite) {
+      setFavIcon(blackHeartIcon);
+    } else {
+      setFavIcon(whiteHeartIcon);
+    }
   };
+
+
+  const setFavRecipe = () => {
+    if (favIcon === whiteHeartIcon) {
+      const favoriteRecipe = {
+        id,
+        type: (type === 'foods' ? 'food' : 'drink'),
+        nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
+        category: (type === 'foods'
+          ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
+        alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
+        name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
+        image: (type === 'foods'
+          ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
+      };
+      setLocalStorageFavorite(favoriteRecipe);
+    } else {
+      const favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+      const filteredArray = favorites.filter((favorite) => favorite.id !== id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filteredArray));
+    }
+  };
+
 
   const handleStartRecipe = () => {
     const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
@@ -92,6 +114,12 @@ function RecipeDetails() {
     copy(`http://localhost:3000${history.location.pathname}`);
   };
 
+
+  const addFavoriteRecipe = () => {
+    setFavRecipe();
+    verifyFavoriteLocalStorage();
+  };
+
   const getInProgressRecipes = useCallback(() => {
     const foodsOrDrinks = verifyRoute ? 'meals' : 'cocktails';
     const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
@@ -102,12 +130,14 @@ function RecipeDetails() {
     }
   }, [id, verifyRoute]);
 
+
   useEffect(() => {
     fetchingData();
     setLocalStorageRecipeObj(recipeObj);
     getInProgressRecipes();
     verifyDoneLocalStorage();
-  }, [fetchingData, getInProgressRecipes, recipeObj, verifyDoneLocalStorage]);
+    verifyFavoriteLocalStorage();
+  }, []);
 
   useEffect(() => {
     setLocalStorageFavorite(favoriteRecipe);
@@ -166,7 +196,8 @@ function RecipeDetails() {
             <button
               type="button"
               data-testid="favorite-btn"
-              onClick={ () => setFavRecipe() }
+              onClick={ addFavoriteRecipe }
+              src={ favIcon }
             >
               Favoritar
 

@@ -9,6 +9,10 @@ export function setLocalStorageRecipeObj(recipeObj) {
 }
 
 export function setLocalStorageFavorite(fav) {
-  localStorage
-    .setItem('favoriteRecipes', JSON.stringify(fav));
+  console.log(fav);
+  let existingEntries = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+  if (!existingEntries) existingEntries = [];
+  console.log(existingEntries);
+  existingEntries.push(fav);
+  localStorage.setItem('favoriteRecipes', JSON.stringify(existingEntries));
 }
