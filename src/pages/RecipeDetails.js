@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
@@ -11,8 +10,6 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 const copy = require('clipboard-copy');
 
 function RecipeDetails() {
-  const { favoriteRecipe,
-    setFavoriteRecipe } = useContext(AppContext);
   const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
@@ -26,8 +23,7 @@ function RecipeDetails() {
   const [continueRecipe, setContinueRecipe] = useState(false);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
   const [favIcon, setFavIcon] = useState(whiteHeartIcon);
-  const [recipeObj] = useState({
-    id: '',
+  const [recipeObj] = useState({ id: '',
     type: '',
     nationality: '',
     category: '',
@@ -67,7 +63,6 @@ function RecipeDetails() {
     }
   };
 
-
   const setFavRecipe = () => {
     if (favIcon === whiteHeartIcon) {
       const favoriteRecipe = {
@@ -88,7 +83,6 @@ function RecipeDetails() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(filteredArray));
     }
   };
-
 
   const handleStartRecipe = () => {
     const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
@@ -114,7 +108,6 @@ function RecipeDetails() {
     copy(`http://localhost:3000${history.location.pathname}`);
   };
 
-
   const addFavoriteRecipe = () => {
     setFavRecipe();
     verifyFavoriteLocalStorage();
@@ -130,7 +123,6 @@ function RecipeDetails() {
     }
   }, [id, verifyRoute]);
 
-
   useEffect(() => {
     fetchingData();
     setLocalStorageRecipeObj(recipeObj);
@@ -140,13 +132,8 @@ function RecipeDetails() {
   }, []);
 
   useEffect(() => {
-    setLocalStorageFavorite(favoriteRecipe);
-  }, [favoriteRecipe]);
-
-  useEffect(() => {
     if (recipe === undefined || recomendations === undefined) return;
 
-    // array de ingredientes e medidas
     const maxIngredient = 20;
     const newArrI = [];
     const newArrQ = [];
