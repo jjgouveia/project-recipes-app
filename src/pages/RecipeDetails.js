@@ -62,7 +62,8 @@ function RecipeDetails() {
     }
   }, [id]);
   const verifyFavoriteLocalStorage = () => {
-    const favoritesArray = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    const favoritesArray = localStorage.getItem('favoriteRecipes')
+      ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
     const isFavorite = favoritesArray.find(((favorite) => favorite.id === id));
     if (isFavorite) {
       setFavIcon(blackHeartIcon);
