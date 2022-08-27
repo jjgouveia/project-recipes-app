@@ -65,18 +65,24 @@ function RecipeDetails() {
   };
 
   const setFavRecipe = () => {
-    const favoriteRecipe = {
-      id,
-      type: (type === 'foods' ? 'food' : 'drink'),
-      nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
-      category: (type === 'foods'
-        ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
-      alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
-      name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
-      image: (type === 'foods'
-        ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
-    };
-    setLocalStorageFavorite(favoriteRecipe);
+    if (favIcon === whiteHeartIcon) {
+      const favoriteRecipe = {
+        id,
+        type: (type === 'foods' ? 'food' : 'drink'),
+        nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
+        category: (type === 'foods'
+          ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
+        alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
+        name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
+        image: (type === 'foods'
+          ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
+      };
+      setLocalStorageFavorite(favoriteRecipe);
+    } else {
+      const favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+      const filteredArray = favorites.filter((favorite) => favorite.id !== id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filteredArray));
+    }
   };
 
   // const verifyFavoriteLocalStorage = () => {
