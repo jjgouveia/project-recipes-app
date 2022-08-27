@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
@@ -9,7 +9,8 @@ import AppContext from '../context/AppContext';
 const copy = require('clipboard-copy');
 
 function RecipeDetails() {
-  const { favoriteRecipe, setFavoriteRecipe } = useContext(AppContext);
+  const { favoriteRecipe,
+    setFavoriteRecipe } = useContext(AppContext);
   const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
@@ -20,7 +21,7 @@ function RecipeDetails() {
   const [recomendations, setRecomendations] = useState();
   const type = location.pathname.split('/')[1];
   const [recipeDone, setRecipeDone] = useState(false);
-  // const [recipeFav, setRecipeFav] = useState(false);
+  const [continueRecipe, setContinueRecipe] = useState(false);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
   const [recipeObj] = useState({
     id: '',
@@ -33,8 +34,9 @@ function RecipeDetails() {
     doneDate: '',
     tags: [],
   });
+  const verifyRoute = location.pathname.includes('foods');
 
-  const fetchingData = async () => {
+  const fetchingData = useCallback(async () => {
     if (type === 'foods') {
       setRecipe(await fetchContent(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`));
       setRecomendations(await fetchContent('https://www.thecocktaildb.com/api/json/v1/1/search.php?s='));
@@ -42,17 +44,15 @@ function RecipeDetails() {
       setRecipe(await fetchContent(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`));
       setRecomendations(await fetchContent('https://www.themealdb.com/api/json/v1/1/search.php?s='));
     }
-  };
+  }, [id, type]);
 
-  // se id não estiver dentro de doneRecipes setRecipeDone(false)
-
-  const verifyDoneLocalStorage = () => {
+  const verifyDoneLocalStorage = useCallback(() => {
     const doneRecipe = [JSON.parse(localStorage.getItem('doneRecipes'))];
     if (doneRecipe) {
       const isDone = doneRecipe.some((done) => Number(done.id) === Number(id));
       if (isDone) setRecipeDone(false);
     }
-  };
+  }, [id]);
 
   const setFavRecipe = () => {
     setFavoriteRecipe({
@@ -67,40 +67,53 @@ function RecipeDetails() {
         ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
     });
   };
-  console.log(favoriteRecipe);
-
-  // const verifyFavoriteLocalStorage = () => {
-  //   const favRecipe = [JSON.parse(localStorage.getItem('favoriteRecipes'))];
-  //   console.log(favRecipe);
-  //   if (favRecipe) {
-  //     const isFav = favRecipe.some((fav) => Number(fav.id) === Number(id));
-  //     if (isFav) setRecipeFav(true);
-  //   }
-  // };
 
   const handleStartRecipe = () => {
-    setRecipeDone(true);
+    const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    let newInProgressRecipe = {};
+    if (inProgressRecipes) {
+      newInProgressRecipe = {
+        ...inProgressRecipes,
+        [mealsOrCocktails]: { [id]: ingredients },
+      };
+    } else {
+      newInProgressRecipe = {
+        [mealsOrCocktails]: { [id]: ingredients },
+      };
+    }
+    localStorage.setItem('inProgressRecipes', JSON.stringify(newInProgressRecipe));
+    setContinueRecipe(true);
     history.push(`/${type}/${id}/in-progress`);
   };
 
   const handleShare = () => {
-    copy(`http://localhost:3000${history.location.pathname}`);
     setShowCopyMsg(true);
+    copy(`http://localhost:3000${history.location.pathname}`);
   };
+
+  const getInProgressRecipes = useCallback(() => {
+    const foodsOrDrinks = verifyRoute ? 'meals' : 'cocktails';
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (inProgressRecipes) {
+      const isInProgress = Object.keys(inProgressRecipes[foodsOrDrinks])
+        .some((inProgressRecipe) => inProgressRecipe === id);
+      if (isInProgress) setContinueRecipe(true);
+    }
+  }, [id, verifyRoute]);
 
   useEffect(() => {
     fetchingData();
     setLocalStorageRecipeObj(recipeObj);
+    getInProgressRecipes();
     verifyDoneLocalStorage();
-  }, []);
+  }, [fetchingData, getInProgressRecipes, recipeObj, verifyDoneLocalStorage]);
 
   useEffect(() => {
     setLocalStorageFavorite(favoriteRecipe);
   }, [favoriteRecipe]);
 
   useEffect(() => {
-    // console.log(recipe);
-    // console.log(recomendations);
     if (recipe === undefined || recomendations === undefined) return;
 
     // array de ingredientes e medidas
@@ -121,7 +134,7 @@ function RecipeDetails() {
     setIngredients([...newArrI]);
     setIngredientsQntd([...newArrQ]);
     setLoading(false);
-  }, [recipe, recomendations]);
+  }, [recipe, recomendations, type]);
 
   return (
     <div>
@@ -218,7 +231,7 @@ function RecipeDetails() {
             style={ { position: 'fixed', bottom: 0 } }
             type="button"
           >
-            Start Recipe
+            {continueRecipe ? 'Continue Recipe' : 'Start Recipe'}
           </button>
         )}
     </div>
