@@ -4,6 +4,8 @@ import { fetchContent } from '../services/recipeAPI';
 import Carousel from '../components/Carousel';
 import { setLocalStorageRecipeObj, setLocalStorageFavorite } from '../services/setKeys';
 import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
@@ -19,6 +21,7 @@ function RecipeDetails() {
   const type = location.pathname.split('/')[1];
   const [recipeDone, setRecipeDone] = useState(false);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
+  const [favIcon, setFavIcon] = useState(whiteHeartIcon);
   const [recipeObj] = useState({
     id: '',
     type: '',
@@ -50,7 +53,16 @@ function RecipeDetails() {
       if (isDone) setRecipeDone(false);
     }
   };
-  console.log();
+
+  const verifyFavoriteLocalStorage = () => {
+    const favorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    const isFavorite = favorites.find(((favorite) => favorite.id === id));
+    if (isFavorite) {
+      setFavIcon(blackHeartIcon);
+    } else {
+      setFavIcon(whiteHeartIcon);
+    }
+  };
 
   const setFavRecipe = () => {
     const favoriteRecipe = {
@@ -88,18 +100,15 @@ function RecipeDetails() {
 
   const addFavoriteRecipe = () => {
     setFavRecipe();
+    verifyFavoriteLocalStorage();
   };
 
   useEffect(() => {
     fetchingData();
     setLocalStorageRecipeObj(recipeObj);
     verifyDoneLocalStorage();
-    // setFavRecipe();
+    verifyFavoriteLocalStorage();
   }, []);
-
-  // useEffect(() => {
-  //   setFavRecipe();
-  // }, [favoriteRecipe]);
 
   useEffect(() => {
     // console.log(recipe);
@@ -157,6 +166,7 @@ function RecipeDetails() {
               type="button"
               data-testid="favorite-btn"
               onClick={ addFavoriteRecipe }
+              src={ favIcon }
             >
               Favoritar
 
