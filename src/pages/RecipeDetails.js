@@ -85,15 +85,6 @@ function RecipeDetails() {
     }
   };
 
-  // const verifyFavoriteLocalStorage = () => {
-  //   const favRecipe = [JSON.parse(localStorage.getItem('favoriteRecipes'))];
-  //   console.log(favRecipe);
-  //   if (favRecipe) {
-  //     const isFav = favRecipe.some((fav) => Number(fav.id) === Number(id));
-  //     if (isFav) setRecipeFav(true);
-  //   }
-  // };
-
   const handleStartRecipe = () => {
     setRecipeDone(true);
     history.push(`/${type}/${id}/in-progress`);
