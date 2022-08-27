@@ -199,7 +199,6 @@ test('se ao clicar no filtro beef muda as receitas', async () => {
     userEvent.click(beefFilter);
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
-
     jest.restoreAllMocks();
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
