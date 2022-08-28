@@ -63,9 +63,6 @@ export default function RecipeInProgressFood() {
   };
 
   useEffect(() => {
-    if (!recipe) {
-      return [];
-    }
     const maxIngredient = 20;
     const newArrI = [];
     const newArrQ = [];
