@@ -1,9 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/RecipeInProgress.css';
+import { setLocalStorageFavorite } from '../services/setKeys';
+
+const copy = require('clipboard-copy');
 
 export default function RecipeInProgressFood() {
   const { id } = useParams();
@@ -11,6 +15,11 @@ export default function RecipeInProgressFood() {
   const [recipe, setRecipe] = useState();
   const [ingredients, setIngredients] = useState([]);
   const [ingredientsQntd, setIngredientsQntd] = useState([]);
+  const [showCopyMsg, setShowCopyMsg] = useState(false);
+  const [favIcon, setFavIcon] = useState(whiteHeartIcon);
+  const favorites = useMemo(() => (localStorage
+    .getItem('favoriteRecipes')
+    ? JSON.parse(localStorage.getItem('favoriteRecipes')) : []), []);
 
   const type = location.pathname.split('/')[1];
 
@@ -22,9 +31,36 @@ export default function RecipeInProgressFood() {
     }
   }, [id, type]);
 
-  useEffect(() => {
-    fetchingData();
-  }, [fetchingData, recipe]);
+  const verifyFavoriteLocalStorage = useCallback(() => {
+    const favoritesArray = localStorage.getItem('favoriteRecipes')
+      ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
+    const isFavorite = favoritesArray.find(((favorite) => favorite.id === id));
+    if (isFavorite) {
+      setFavIcon(blackHeartIcon);
+    } else {
+      setFavIcon(whiteHeartIcon);
+    }
+  }, [id]);
+
+  const setFavRecipe = () => {
+    if (favIcon === whiteHeartIcon) {
+      const favoriteRecipe = {
+        id,
+        type: (type === 'foods' ? 'food' : 'drink'),
+        nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
+        category: (type === 'foods'
+          ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
+        alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
+        name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
+        image: (type === 'foods'
+          ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
+      };
+      setLocalStorageFavorite(favoriteRecipe);
+    } else {
+      const filteredArray = favorites.filter((favorite) => favorite.id !== id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filteredArray));
+    }
+  };
 
   useEffect(() => {
     if (!recipe) {
@@ -59,6 +95,23 @@ export default function RecipeInProgressFood() {
         .getElementById(ide).className = '';
     }
   };
+
+  const handleShare = () => {
+    const FIVE = 5;
+    const url = window.location.href.split('/', FIVE).join('/');
+    setShowCopyMsg(true);
+    copy(`${url}`);
+  };
+
+  const addFavoriteRecipe = () => {
+    setFavRecipe();
+    verifyFavoriteLocalStorage();
+  };
+
+  useEffect(() => {
+    fetchingData();
+    verifyFavoriteLocalStorage();
+  }, [fetchingData, recipe, verifyFavoriteLocalStorage]);
 
   return (
     <div className="">
@@ -118,6 +171,7 @@ export default function RecipeInProgressFood() {
               <button
                 type="button"
                 data-testid="share-btn"
+                onClick={ handleShare }
               >
                 <img
                   src={ shareIcon }
@@ -126,12 +180,15 @@ export default function RecipeInProgressFood() {
 
                 Compartilhar
               </button>
+              {showCopyMsg && <h4>Link copied!</h4>}
               <button
                 type="button"
                 data-testid="favorite-btn"
+                onClick={ addFavoriteRecipe }
+                src={ favIcon }
               >
                 <img
-                  src={ whiteHeartIcon }
+                  src={ favIcon }
                   alt="favorite"
                 />
 
