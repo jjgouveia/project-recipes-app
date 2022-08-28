@@ -11,12 +11,14 @@ const copy = require('clipboard-copy');
 
 export default function RecipeInProgressFood() {
   const { id } = useParams();
+  const [recipeId, setRecipeId] = useState(0);
   const location = useLocation();
   const [recipe, setRecipe] = useState();
   const [ingredients, setIngredients] = useState([]);
   const [ingredientsQntd, setIngredientsQntd] = useState([]);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
   const [favIcon, setFavIcon] = useState(whiteHeartIcon);
+  const [savedCheckbox, setSavedCheckbox] = useState([]);
   const favorites = useMemo(() => (localStorage
     .getItem('favoriteRecipes')
     ? JSON.parse(localStorage.getItem('favoriteRecipes')) : []), []);
@@ -30,6 +32,18 @@ export default function RecipeInProgressFood() {
       setRecipe(await fetchContent(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`));
     }
   }, [id, type]);
+
+  useEffect(() => {
+    setRecipeId(id);
+    if (!localStorage.getItem('stepsChecked')) {
+      localStorage.setItem('stepsChecked', JSON.stringify({}));
+    }
+    const savedRecipe = JSON.parse(localStorage.getItem('stepsChecked'));
+
+    if (savedRecipe[id]) {
+      setSavedCheckbox(savedRecipe[id]);
+    }
+  }, [id]);
 
   const verifyFavoriteLocalStorage = useCallback(() => {
     const favoritesArray = localStorage.getItem('favoriteRecipes')
@@ -83,14 +97,26 @@ export default function RecipeInProgressFood() {
     }
   }, [recipe, type]);
 
-  const handleCheck = ({ target: { checked, id: ide } }) => {
-    if (checked) {
-      document
-        .getElementById(ide).className = 'checked';
-    } else {
+  const handleCheck = ({ target: { checked, id: ide } }, index) => {
+    if (!checked) {
       document
         .getElementById(ide).className = '';
+      const savedRecipe = JSON.parse(localStorage.getItem('stepsChecked'));
+      delete (savedRecipe[recipeId][index]);
+      localStorage.setItem('stepsChecked', JSON.stringify(savedRecipe));
+    } else {
+      document
+        .getElementById(ide).className = 'checked';
+      if (!localStorage.getItem('stepsChecked')) {
+        localStorage
+          .setItem('stepsChecked', JSON.stringify({ [recipeId]: { [index]: true } }));
+      }
+      const savedRecipe = JSON.parse(localStorage.getItem('stepsChecked'));
+      localStorage.setItem('stepsChecked',
+        JSON.stringify({ [recipeId]: { [index]: true, ...savedRecipe[recipeId] } }));
     }
+    const savedRecipe = JSON.parse(localStorage.getItem('stepsChecked'));
+    setSavedCheckbox(savedRecipe[recipeId]);
   };
 
   const handleShare = () => {
@@ -143,7 +169,10 @@ export default function RecipeInProgressFood() {
                       htmlFor={ `ingredient - ${index}` }
                       data-testid={ `${index}-ingredient-step` }
                     >
-                      <span id={ `ingredient - ${index}` }>
+                      <span
+                        id={ `ingredient - ${index}` }
+                        className={ savedCheckbox[index] ? 'checked' : '' }
+                      >
                         {ingredientsQntd[index]}
                     &nbsp;
                         {ingredient}
@@ -153,7 +182,9 @@ export default function RecipeInProgressFood() {
                         type="checkbox"
                         id={ `ingredient - ${index}` }
                         name={ ingredient }
-                        onClick={ handleCheck }
+                        onChange={ (event) => handleCheck(event, index) }
+                        checked={ !!savedCheckbox[index] }
+
                       />
                     </label>
                   </li>),

@@ -5,13 +5,7 @@ export default function saveKeys() {
     .getItem('cocktailsToken')) localStorage.setItem('cocktailsToken', '');
   if (!localStorage
     .getItem('doneRecipes')) localStorage.setItem('doneRecipes', []);
-  if (!localStorage
-    .getItem('inProgressRecipes')) {
-    localStorage.setItem('inProgressRecipes', JSON.stringify({
-      cocktails: {},
-      meals: {},
-    }));
-  }
+
   if (!localStorage
     .getItem('favoriteRecipes')) localStorage.setItem('favoriteRecipes', []);
 }
