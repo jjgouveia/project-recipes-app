@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -10,6 +10,7 @@ import { setLocalStorageFavorite } from '../services/setKeys';
 const copy = require('clipboard-copy');
 
 export default function RecipeInProgressFood() {
+  const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
   const [recipe, setRecipe] = useState();
@@ -98,6 +99,10 @@ export default function RecipeInProgressFood() {
     const url = window.location.href.split('/', FIVE).join('/');
     setShowCopyMsg(true);
     copy(`${url}`);
+  };
+
+  const handleFinish = () => {
+    history.push('/done-recipes');
   };
 
   const addFavoriteRecipe = () => {
@@ -191,7 +196,11 @@ export default function RecipeInProgressFood() {
 
                 Favoritar
               </button>
-              <button type="button" data-testid="finish-recipe-btn">
+              <button
+                type="button"
+                data-testid="finish-recipe-btn"
+                onClick={ handleFinish }
+              >
                 Finish Recipe
               </button>
             </div>

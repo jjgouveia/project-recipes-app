@@ -4,7 +4,7 @@ import Header from '../components/Header';
 export default function DoneRecipes() {
   const [doneRecipes, setDoneRecipes] = useState([]);
   const getDoneRecipes = () => {
-    setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes')));
+    setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes')) || []);
   };
   useEffect(() => {
     getDoneRecipes();
