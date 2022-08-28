@@ -62,13 +62,15 @@ function RecipeDetails() {
     }
   }, [id]);
   const verifyFavoriteLocalStorage = useCallback(() => {
-    const isFavorite = favorites.find(((favorite) => favorite.id === id));
+    const favoritesArray = localStorage.getItem('favoriteRecipes')
+      ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
+    const isFavorite = favoritesArray.find(((favorite) => favorite.id === id));
     if (isFavorite) {
       setFavIcon(blackHeartIcon);
     } else {
       setFavIcon(whiteHeartIcon);
     }
-  }, [favorites, id]);
+  }, [id]);
   const setFavRecipe = () => {
     if (favIcon === whiteHeartIcon) {
       const favoriteRecipe = {
@@ -150,8 +152,8 @@ function RecipeDetails() {
         newArrQ.push(recipe.drinks[0][keyQ]);
       }
     }
-    setIngredients([...newArrI]);
-    setIngredientsQntd([...newArrQ]);
+    setIngredients([...newArrI].filter(Boolean));
+    setIngredientsQntd([...newArrQ].filter(Boolean));
     setLoading(false);
   }, [recipe, recomendations, type]);
   return (
