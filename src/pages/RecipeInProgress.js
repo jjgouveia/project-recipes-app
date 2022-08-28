@@ -44,8 +44,8 @@ export default function RecipeInProgressFood() {
           newArrQ.push(recipe.drinks[0][keyQ]);
         }
       }
-      setIngredients([...newArrI]);
-      setIngredientsQntd([...newArrQ]);
+      setIngredients([...newArrI].filter(Boolean));
+      setIngredientsQntd([...newArrQ].filter(Boolean));
     }
   }, [recipe, type]);
 
@@ -74,9 +74,7 @@ export default function RecipeInProgressFood() {
             </h4>
           </div>
           <div>
-            {ingredients.filter((ingredient) => (
-              ingredient !== '' && ingredient !== null && ingredient !== undefined
-            )).map(
+            {ingredients.map(
               (ingredient, index) => (
                 <div className="" key={ index }>
                   <h6 data-testid={ `$data-testid=${index}-ingredient-step` }>

@@ -61,7 +61,7 @@ function RecipeDetails() {
       if (isDone) setRecipeDone(false);
     }
   }, [id]);
-  const verifyFavoriteLocalStorage = () => {
+  const verifyFavoriteLocalStorage = useCallback(() => {
     const favoritesArray = localStorage.getItem('favoriteRecipes')
       ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
     const isFavorite = favoritesArray.find(((favorite) => favorite.id === id));
@@ -70,7 +70,7 @@ function RecipeDetails() {
     } else {
       setFavIcon(whiteHeartIcon);
     }
-  };
+  }, [id]);
   const setFavRecipe = () => {
     if (favIcon === whiteHeartIcon) {
       const favoriteRecipe = {
@@ -134,7 +134,8 @@ function RecipeDetails() {
     getInProgressRecipes();
     verifyDoneLocalStorage();
     verifyFavoriteLocalStorage();
-  }, []);
+  }, [fetchingData,
+    getInProgressRecipes, verifyDoneLocalStorage, verifyFavoriteLocalStorage]);
   useEffect(() => {
     if (recipe === undefined || recomendations === undefined) return;
     const maxIngredient = 20;
@@ -151,8 +152,8 @@ function RecipeDetails() {
         newArrQ.push(recipe.drinks[0][keyQ]);
       }
     }
-    setIngredients([...newArrI]);
-    setIngredientsQntd([...newArrQ]);
+    setIngredients([...newArrI].filter(Boolean));
+    setIngredientsQntd([...newArrQ].filter(Boolean));
     setLoading(false);
   }, [recipe, recomendations, type]);
   return (
