@@ -135,7 +135,8 @@ function RecipeDetails() {
     verifyDoneLocalStorage();
     verifyFavoriteLocalStorage();
   }, [fetchingData,
-    getInProgressRecipes, verifyDoneLocalStorage, verifyFavoriteLocalStorage]);
+    getInProgressRecipes,
+    id, verifyDoneLocalStorage, verifyFavoriteLocalStorage, verifyRoute]);
   useEffect(() => {
     if (recipe === undefined || recomendations === undefined) return;
     const maxIngredient = 20;
@@ -190,7 +191,6 @@ function RecipeDetails() {
             { type === 'foods'
               ? recipe.meals[0].strMeal
               : recipe.drinks[0].strDrink}
-
           </h1>
           <h2 data-testid="recipe-category">
             {type === 'foods'
