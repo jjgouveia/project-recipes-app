@@ -3,6 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { fetchContent } from '../services/recipeAPI';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import '../styles/RecipeInProgress.css';
 
 export default function RecipeInProgressFood() {
   const { id } = useParams();
@@ -44,10 +45,20 @@ export default function RecipeInProgressFood() {
           newArrQ.push(recipe.drinks[0][keyQ]);
         }
       }
-      setIngredients([...newArrI]);
-      setIngredientsQntd([...newArrQ]);
+      setIngredients([...newArrI].filter(Boolean));
+      setIngredientsQntd([...newArrQ].filter(Boolean));
     }
   }, [recipe, type]);
+
+  const handleCheck = ({ target: { checked, id: ide } }) => {
+    if (checked) {
+      document
+        .getElementById(ide).className = 'checked';
+    } else {
+      document
+        .getElementById(ide).className = '';
+    }
+  };
 
   return (
     <div className="">
@@ -74,17 +85,30 @@ export default function RecipeInProgressFood() {
             </h4>
           </div>
           <div>
-            {ingredients.filter((ingredient) => (
-              ingredient !== '' && ingredient !== null && ingredient !== undefined
-            )).map(
-              (ingredient, index) => (
-                <div className="" key={ index }>
-                  <h6 data-testid={ `$data-testid=${index}-ingredient-step` }>
-                    {ingredientsQntd[index]}
-                    {ingredient}
-                  </h6>
-                </div>),
-            )}
+            <ul>
+              {ingredients.map(
+                (ingredient, index) => (
+                  <li className="" key={ index }>
+                    <label
+                      htmlFor={ `ingredient - ${index}` }
+                      data-testid={ `${index}-ingredient-step` }
+                    >
+                      <span id={ `ingredient - ${index}` }>
+                        {ingredientsQntd[index]}
+                    &nbsp;
+                        {ingredient}
+                    &nbsp;
+                      </span>
+                      <input
+                        type="checkbox"
+                        id={ `ingredient - ${index}` }
+                        name={ ingredient }
+                        onClick={ handleCheck }
+                      />
+                    </label>
+                  </li>),
+              )}
+            </ul>
             <div data-testid="instructions">
               {type === 'foods'
                 ? recipe.meals[0].strInstructions

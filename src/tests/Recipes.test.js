@@ -8,10 +8,15 @@ import mealCategories from "../../cypress/mocks/mealCategories";
 import drinkCategories from "../../cypress/mocks/drinkCategories";
 import App from '../App';
 import renderWithRouter from "./helpers/renderWithRouter";
+import { act } from "react-dom/test-utils";
 
 
 
 describe('testa Recipes', () => {
+
+  afterEach(() => {
+    jest.clearAllMocks();
+});
   
 test('se os botoes aparecem na pagina', async () => {
     const { history } = renderWithRouter(<App />);
@@ -27,7 +32,8 @@ test('se os botoes aparecem na pagina', async () => {
 
  
 test('testa recipes foods', async () => {
-  const { history } = renderWithRouter(<App />)
+  await act(async () => renderWithRouter(<App />, '/foods'))
+  const { history } = renderWithRouter(<App/>);
   history.push('/foods')
 
   const Corba = await screen.findByText('Corba') ;
@@ -37,6 +43,8 @@ test('testa recipes foods', async () => {
   
 })
 test('testa recipes foods', async () => {
+  await act(async () => renderWithRouter(<App />, '/foods'))
+
   const { history } = renderWithRouter(<App />)
   history.push('/foods')
 
@@ -50,6 +58,8 @@ test('testa recipes foods', async () => {
 })
 
 test('testa recipes drinks', async () => {
+  await act(async () => renderWithRouter(<App />, '/drinks'))
+
   const { history } = renderWithRouter(<App />)
   history.push('/drinks')
 
@@ -64,6 +74,8 @@ test('se ao clicar no filtro beef muda as receitas', async () => {
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(mealCategories),
     });
+    await act(async () => renderWithRouter(<App />, '/foods'))
+
     const { history } = renderWithRouter(<App />);
     history.push('/foods');
     await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -88,7 +100,9 @@ test('se ao clicar no filtro beef muda as receitas', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(drinkCategories),
-    });
+    });  
+    await act(async () => renderWithRouter(<App />, '/foods'))
+
     const { history } = renderWithRouter(<App />);
     history.push('/drinks');
     await waitFor(() => expect(fetch).toHaveBeenCalled());
