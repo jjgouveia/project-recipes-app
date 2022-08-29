@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
-export default function FavoriteRecipes(props) {
+export default function FavoriteRecipes() {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [favIcon] = useState(blackHeartIcon);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
@@ -19,6 +19,11 @@ export default function FavoriteRecipes(props) {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
     console.log(favoriteRecipes);
   };
+
+  // const removeFavorite = ({ target }) => {
+  //   console.log(target);
+  //   // const filteredFavorites = favoriteRecipes.filter((favorite) => )
+  // };
 
   useEffect(() => {
     getFavoriteRecipes();
@@ -66,7 +71,7 @@ export default function FavoriteRecipes(props) {
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <button
               type="button"
-              onClick={ () => handleShare(recipe, index) }
+              onClick={ () => handleShare(recipe) }
             >
               <img
                 src={ shareIcon }
@@ -80,6 +85,7 @@ export default function FavoriteRecipes(props) {
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
               src={ favIcon }
+              // onClick={ removeFavorite }
             >
               Desfavoritar
             </button>
@@ -99,7 +105,7 @@ export default function FavoriteRecipes(props) {
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <button
               type="button"
-              onClick={ () => handleShare(recipe, index) }
+              onClick={ () => handleShare(recipe) }
             >
               <img
                 src={ shareIcon }
@@ -113,6 +119,7 @@ export default function FavoriteRecipes(props) {
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
               src={ favIcon }
+              // onClick={ removeFavorite }
             >
               Favoritar
             </button>
