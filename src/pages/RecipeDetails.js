@@ -30,6 +30,7 @@ function RecipeDetails() {
   const verifyRoute = location.pathname.includes('foods');
   const setDoneRecipe = () => {
     const doneRecipes = {
+      id,
       type: (type === 'foods' ? 'food' : 'drink'),
       nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
       category: (type === 'foods'
@@ -231,7 +232,6 @@ function RecipeDetails() {
             type={ type }
           />
         </div>
-
       )}
       {recipeDone ? ''
         : (

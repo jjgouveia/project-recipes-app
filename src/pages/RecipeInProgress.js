@@ -188,7 +188,7 @@ export default function RecipeInProgressFood() {
                         id={ `ingredient - ${index}` }
                         name={ ingredient }
                         onChange={ (event) => handleCheck(event, index) }
-                        checked={ !!savedCheckbox[index] }
+                        checked={ savedCheckbox[index] }
 
                       />
                     </label>
