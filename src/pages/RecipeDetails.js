@@ -10,7 +10,7 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-function RecipeDetails() {
+export default function RecipeDetails() {
   const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
@@ -248,4 +248,3 @@ function RecipeDetails() {
     </div>
   );
 }
-export default RecipeDetails;
