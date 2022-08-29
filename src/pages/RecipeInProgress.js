@@ -127,10 +127,6 @@ export default function RecipeInProgressFood() {
     copy(`${url}`);
   };
 
-  const handleFinish = () => {
-    history.push('/done-recipes');
-  };
-
   const addFavoriteRecipe = () => {
     setFavRecipe();
     verifyFavoriteLocalStorage();
@@ -230,7 +226,8 @@ export default function RecipeInProgressFood() {
               <button
                 type="button"
                 data-testid="finish-recipe-btn"
-                onClick={ handleFinish }
+                onClick={ () => history.push('/done-recipes') }
+                disabled={ ingredients.length !== Object.keys(savedCheckbox).length }
               >
                 Finish Recipe
               </button>
