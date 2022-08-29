@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 export default function FavoriteRecipes() {
+  const history = useHistory();
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [favIcon] = useState(blackHeartIcon);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
@@ -20,6 +22,10 @@ export default function FavoriteRecipes() {
     console.log(favoriteRecipes);
   };
 
+  const redirectToDetails = (type, id) => {
+    history.push(`/${type}s/${id}`);
+  };
+
   // const removeFavorite = ({ target }) => {
   //   console.log(target);
   //   // const filteredFavorites = favoriteRecipes.filter((favorite) => )
@@ -28,6 +34,7 @@ export default function FavoriteRecipes() {
   useEffect(() => {
     getFavoriteRecipes();
   }, []);
+
   return (
     <div>
       <Header title="Favorite Recipes" />
@@ -54,20 +61,36 @@ export default function FavoriteRecipes() {
       {favoriteRecipes.map((recipe, index) => (
         recipe.type === 'food' ? (
           <div key={ recipe.name }>
-            <img
-              alt="foto-receita"
-              data-testid={ `${index}-horizontal-image` }
-              src={ recipe.image }
-              style={ { width: '200px' } }
-            />
-            <h3 data-testid={ `${index}-horizontal-top-text` }>
-              {recipe.nationality}
-              {' '}
-              -
-              {' '}
-              {recipe.category}
-            </h3>
-            <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
+            <div key={ recipe.name }>
+              <div
+                onClick={ () => redirectToDetails(recipe.type, recipe.id) }
+                onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
+                role="button"
+                tabIndex={ 0 }
+              >
+                <img
+                  alt="foto-receita"
+                  data-testid={ `${index}-horizontal-image` }
+                  src={ recipe.image }
+                  style={ { width: '200px' } }
+                />
+                <h3 data-testid={ `${index}-horizontal-top-text` }>
+                  {recipe.nationality}
+                  {' '}
+                  -
+                  {' '}
+                  {recipe.category}
+                </h3>
+              </div>
+            </div>
+            <div
+              onClick={ () => redirectToDetails(recipe.type, recipe.id) }
+              onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
+              role="button"
+              tabIndex={ 0 }
+            >
+              <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
+            </div>
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <button
               type="button"
@@ -85,23 +108,36 @@ export default function FavoriteRecipes() {
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
               src={ favIcon }
-              // onClick={ removeFavorite }
             >
               Desfavoritar
             </button>
           </div>
         ) : (
           <div key={ `${recipe.name}123` }>
-            <img
-              alt="foto-receita"
-              data-testid={ `${index}-horizontal-image` }
-              src={ recipe.image }
-              style={ { width: '200px' } }
-            />
+            <div
+              onClick={ () => redirectToDetails(recipe.type, recipe.id) }
+              onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
+              role="button"
+              tabIndex={ 0 }
+            >
+              <img
+                alt="foto-receita"
+                data-testid={ `${index}-horizontal-image` }
+                src={ recipe.image }
+                style={ { width: '200px' } }
+              />
+            </div>
             <h3 data-testid={ `${index}-horizontal-top-text` }>
               {recipe.alcoholicOrNot}
             </h3>
-            <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
+            <div
+              onClick={ () => redirectToDetails(recipe.type, recipe.id) }
+              onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
+              role="button"
+              tabIndex={ 0 }
+            >
+              <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
+            </div>
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <button
               type="button"
@@ -119,7 +155,6 @@ export default function FavoriteRecipes() {
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
               src={ favIcon }
-              // onClick={ removeFavorite }
             >
               Favoritar
             </button>
@@ -129,3 +164,5 @@ export default function FavoriteRecipes() {
     </div>
   );
 }
+
+// onClick = { removeFavorite };
