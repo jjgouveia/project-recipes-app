@@ -64,7 +64,6 @@ export default function FavoriteRecipes() {
   useEffect(() => {
     localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
   }, [favoriteRecipes]);
-  
   return (
     <div>
       <Header title="Favorite Recipes" />
