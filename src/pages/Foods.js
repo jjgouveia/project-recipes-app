@@ -18,7 +18,7 @@ function Foods({ location: { pathname } }) {
     };
     fetchRecipes();
   }, [setApiResponse]);
-  // console.log(apiResponse);
+  console.log(apiResponse);
 
   if (meals.length === 1 && !filtersOn) {
     return <Redirect to={ `/foods/${meals[0].idMeal}` } />;
