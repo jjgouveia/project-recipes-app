@@ -26,15 +26,26 @@ export default function FavoriteRecipes() {
     history.push(`/${type}s/${id}`);
   };
 
-  // const removeFavorite = ({ target }) => {
-  //   console.log(target);
-  //   // const filteredFavorites = favoriteRecipes.filter((favorite) => )
+  // const removeFavorite = (favoriteId) => {
+  // const filteredFavorites = favoriteRecipes.filter((favorite) => (
+  //   favorite.id !== favoriteId));
+  // setFavoriteRecipes(filteredFavorites);
   // };
+
+  const removeFavorite = (favoriteId) => {
+    setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
+      .filter((favorite) => (
+        favorite.id !== favoriteId)) || []);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
+  };
 
   useEffect(() => {
     getFavoriteRecipes();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
+  }, [favoriteRecipes]);
   return (
     <div>
       <Header title="Favorite Recipes" />
@@ -108,6 +119,7 @@ export default function FavoriteRecipes() {
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
               src={ favIcon }
+              onClick={ () => removeFavorite(recipe.id) }
             >
               Desfavoritar
             </button>
@@ -155,6 +167,7 @@ export default function FavoriteRecipes() {
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
               src={ favIcon }
+              onClick={ () => removeFavorite(recipe.id) }
             >
               Favoritar
             </button>
@@ -164,5 +177,3 @@ export default function FavoriteRecipes() {
     </div>
   );
 }
-
-// onClick = { removeFavorite };
