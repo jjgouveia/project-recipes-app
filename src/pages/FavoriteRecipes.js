@@ -3,9 +3,18 @@ import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
-export default function FavoriteRecipes() {
+export default function FavoriteRecipes(props) {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [favIcon] = useState(blackHeartIcon);
+  const [showCopyMsg, setShowCopyMsg] = useState(false);
+
+  const handleShare = (recipe) => {
+    const { id, type } = recipe;
+    setShowCopyMsg(!showCopyMsg);
+    const recipeType = type === 'drink' ? 'drinks' : 'foods';
+    navigator.clipboard.writeText(`http://localhost:3000/${recipeType}/${id}`);
+  };
+
   const getFavoriteRecipes = () => {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
     console.log(favoriteRecipes);
@@ -57,6 +66,7 @@ export default function FavoriteRecipes() {
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <button
               type="button"
+              onClick={ () => handleShare(recipe, index) }
             >
               <img
                 src={ shareIcon }
@@ -65,6 +75,7 @@ export default function FavoriteRecipes() {
               />
               Compartilhar
             </button>
+            { showCopyMsg && <h4>Link copied!</h4>}
             <button
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
@@ -88,6 +99,7 @@ export default function FavoriteRecipes() {
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <button
               type="button"
+              onClick={ () => handleShare(recipe, index) }
             >
               <img
                 src={ shareIcon }
@@ -96,6 +108,7 @@ export default function FavoriteRecipes() {
               />
               Compartilhar
             </button>
+            { showCopyMsg && <h4>Link copied!</h4>}
             <button
               type="button"
               data-testid={ `${index}-horizontal-favorite-btn` }
