@@ -10,7 +10,7 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-function RecipeDetails() {
+export default function RecipeDetails() {
   const history = useHistory();
   const { id } = useParams();
   const location = useLocation();
@@ -123,8 +123,9 @@ function RecipeDetails() {
   };
   const getInProgressRecipes = useCallback(() => {
     const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (inProgressRecipes) {
+    const inProgressRecipes = localStorage.getItem('inProgressRecipes')
+      ? JSON.parse(localStorage.getItem('inProgressRecipes')) : [];
+    if (inProgressRecipes[mealsOrCocktails]) {
       const isInProgress = Object.keys(inProgressRecipes[mealsOrCocktails])
         .some((inProgressRecipe) => inProgressRecipe === id);
       if (isInProgress) setContinueRecipe(true);
@@ -247,4 +248,3 @@ function RecipeDetails() {
     </div>
   );
 }
-export default RecipeDetails;
