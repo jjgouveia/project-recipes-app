@@ -188,6 +188,9 @@ afterEach(() => {
         userEvent.click(screen.getByTestId('0-ingredient-step'));
         userEvent.click(screen.getByTestId('1-ingredient-step'));
         userEvent.click(screen.getByTestId('2-ingredient-step'));
+        userEvent.click(finishBtn)
+          const { pathname } = history.location;
+          expect(pathname).toBe('/done-recipes');
         console.log(JSON.parse(localStorage.getItem(CHECK_KEY)));
         expect(JSON.parse(localStorage.getItem(CHECK_KEY))).toEqual(JSON.parse(CHECK_VALUE1))
         localStorage.clear()
@@ -271,6 +274,9 @@ afterEach(() => {
           expect(finishBtn).toBeInTheDocument();
           expect(screen.getByTestId('finish-recipe-btn').innerHTML).toBe('Finish Recipe');
           expect(screen.getAllByTestId(/ingredient-step/i).length).toBe(3);
+          userEvent.click(screen.getByTestId('0-ingredient-step'));
+          userEvent.click(screen.getByTestId('1-ingredient-step'));
+          userEvent.click(screen.getByTestId('2-ingredient-step'));
           
           userEvent.click(finishBtn)
           const { pathname } = history.location;
