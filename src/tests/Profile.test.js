@@ -6,17 +6,26 @@ import Profile from "../pages/Profile";
 
 describe("Testa a página Profile", () => {
   beforeEach(() => {
-    localStorage.setItem("user", '{"email":"adalovelace@teste.com"}');
+    localStorage.setItem("user",  "{\"email\":\"adalovelace@teste.com\"}");
   });
   it("Verifica se o email salvo no localStorage é renderizado", () => {
-    localStorage.removeItem("user");
-    renderWithRouter(<Profile />, "/profile");
+    renderWithRouter(<Profile />);
+    expect(screen.getByTestId("profile-email").textContent).toBe(
+      "adalovelace@teste.com"
+    );
+  });
+  it("Verifica se a chave é recriada no storage", () => {
+    localStorage.removeItem('user');
+    renderWithRouter(<Profile />);
     expect(screen.getByTestId("profile-email").textContent).toBe(
       "adalovelace@teste.com"
     );
   });
   it('Verifica se ao clicar em "Logout" apaga o localStorage e redireciona para login("/")', () => {
     const { history } = renderWithRouter(<Profile />, "/profile");
+
+    localStorage.removeItem("user");
+
 
     const button = screen.getByRole("button", { name: "Logout" });
     userEvent.click(button);
