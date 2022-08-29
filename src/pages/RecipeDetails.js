@@ -123,8 +123,8 @@ export default function RecipeDetails() {
   };
   const getInProgressRecipes = useCallback(() => {
     const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
-    const inProgressRecipes = localStorage.getItem('favoriteRecipes')
-      ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
+    const inProgressRecipes = localStorage.getItem('inProgressRecipes')
+      ? JSON.parse(localStorage.getItem('inProgressRecipes')) : [];
     if (inProgressRecipes[mealsOrCocktails]) {
       const isInProgress = Object.keys(inProgressRecipes[mealsOrCocktails])
         .some((inProgressRecipe) => inProgressRecipe === id);
