@@ -123,8 +123,9 @@ function RecipeDetails() {
   };
   const getInProgressRecipes = useCallback(() => {
     const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (inProgressRecipes) {
+    const inProgressRecipes = localStorage.getItem('favoriteRecipes')
+      ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
+    if (inProgressRecipes[mealsOrCocktails]) {
       const isInProgress = Object.keys(inProgressRecipes[mealsOrCocktails])
         .some((inProgressRecipe) => inProgressRecipe === id);
       if (isInProgress) setContinueRecipe(true);
