@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 export default function FavoriteRecipes() {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
-  const [favIcon, setFavIcon] = useState(blackHeartIcon);
+  const [favIcon] = useState(blackHeartIcon);
   const getFavoriteRecipes = () => {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
     console.log(favoriteRecipes);
