@@ -18,7 +18,7 @@ describe("Testa a página Profile", () => {
     localStorage.removeItem('user');
     renderWithRouter(<Profile />);
     expect(screen.getByTestId("profile-email").textContent).toBe(
-      "adalovelace@teste.com"
+      ""
     );
   });
   it('Verifica se ao clicar em "Logout" apaga o localStorage e redireciona para login("/")', () => {
