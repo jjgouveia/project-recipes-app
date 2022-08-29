@@ -19,6 +19,7 @@ describe('testa Recipes', () => {
 });
   
 test('se os botoes aparecem na pagina', async () => {
+    await act(async () => renderWithRouter(<App />));
     const { history } = renderWithRouter(<App />);
     history.push('/foods');
     expect(await screen.findByTestId('Beef-category-filter')).toBeInTheDocument();
