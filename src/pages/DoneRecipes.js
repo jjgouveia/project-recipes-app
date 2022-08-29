@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import DoneRecipeButton from '../components/DoneRecipeButton';
 import Header from '../components/Header';
-import shareIcon from '../images/shareIcon.svg';
 
 export default function DoneRecipes() {
   const [doneRecipes, setDoneRecipes] = useState([]);
@@ -60,17 +60,11 @@ export default function DoneRecipes() {
             </h3>
             <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
-            <button
-              type="button"
-              data-testid={ `${index}-horizontal-share-btn` }
-              src={ shareIcon }
-            >
-              Compartilhar
-            </button>
+            <DoneRecipeButton recipe={ recipe } index={ index } />
             {showTags(recipe, index)}
           </div>
         ) : (
-          <div key={ recipe.name }>
+          <div key={ `${recipe.name}123` }>
             <img
               alt="foto-receita"
               data-testid={ `${index}-horizontal-image` }
@@ -82,13 +76,7 @@ export default function DoneRecipes() {
             </h3>
             <h2 data-testid={ `${index}-horizontal-name` }>{recipe.name}</h2>
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
-            <button
-              type="button"
-              data-testid={ `${index}-horizontal-share-btn` }
-              src={ shareIcon }
-            >
-              Compartilhar
-            </button>
+            <DoneRecipeButton recipe={ recipe } index={ index } />
             {showTags(recipe, index)}
           </div>
         )
