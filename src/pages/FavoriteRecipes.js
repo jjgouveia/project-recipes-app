@@ -24,22 +24,6 @@ export default function FavoriteRecipes() {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
   };
 
-  const foodFilter = () => {
-    const food = favoriteRecipes.filter((elemento) => elemento.type !== 'drink');
-    setFavoriteRecipesFake(food);
-    setLoading(false);
-  };
-
-  const drinkFilter = () => {
-    const drink = favoriteRecipes.filter((elemento) => elemento.type !== 'food');
-    setFavoriteRecipesFake(drink);
-    setLoading(false);
-  };
-
-  const allFilter = () => {
-    setLoading(true);
-  };
-
   const redirectToDetails = (type, id) => {
     history.push(`/${type}s/${id}`);
   };
@@ -49,6 +33,19 @@ export default function FavoriteRecipes() {
   //   favorite.id !== favoriteId));
   // setFavoriteRecipes(filteredFavorites);
   // };
+
+  const filterRecipes = ({ target: { innerHTML } }) => {
+    console.log(innerHTML);
+    if (innerHTML === 'All') {
+      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
+    } else if (innerHTML === 'Food') {
+      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
+        .filter((recipe) => recipe.type === 'food') || []);
+    } else {
+      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
+        .filter((recipe) => recipe.type === 'drink') || []);
+    }
+  };
 
   const removeFavorite = (favoriteId) => {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
@@ -71,21 +68,21 @@ export default function FavoriteRecipes() {
         <button
           type="button"
           data-testid="filter-by-all-btn"
-          onClick={ allFilter }
+          onClick={ filterRecipes }
         >
           All
         </button>
         <button
           type="button"
           data-testid="filter-by-food-btn"
-          onClick={ foodFilter }
+          onClick={ filterRecipes }
         >
           Food
         </button>
         <button
           type="button"
           data-testid="filter-by-drink-btn"
-          onClick={ drinkFilter }
+          onClick={ filterRecipes }
         >
           Drinks
         </button>
