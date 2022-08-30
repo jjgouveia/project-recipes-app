@@ -9,7 +9,7 @@ import { setLocalStorageFavorite } from '../services/setKeys';
 
 const copy = require('clipboard-copy');
 
-export default function RecipeInProgressFood() {
+export default function RecipeInProgress() {
   const history = useHistory();
   const { id } = useParams();
   const [recipeId, setRecipeId] = useState(0);
@@ -23,9 +23,7 @@ export default function RecipeInProgressFood() {
   const favorites = useMemo(() => (localStorage
     .getItem('favoriteRecipes')
     ? JSON.parse(localStorage.getItem('favoriteRecipes')) : []), []);
-
   const type = location.pathname.split('/')[1];
-
   const fetchingData = useCallback(async () => {
     if (type === 'foods') {
       setRecipe(await fetchContent(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`));
@@ -45,7 +43,6 @@ export default function RecipeInProgressFood() {
       setSavedCheckbox(savedRecipe[id]);
     }
   }, [id]);
-
   const verifyFavoriteLocalStorage = useCallback(() => {
     const favoritesArray = localStorage.getItem('favoriteRecipes')
       ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
@@ -56,7 +53,6 @@ export default function RecipeInProgressFood() {
       setFavIcon(whiteHeartIcon);
     }
   }, [id]);
-
   const setFavRecipe = () => {
     if (favIcon === whiteHeartIcon) {
       const favoriteRecipe = {
@@ -76,7 +72,6 @@ export default function RecipeInProgressFood() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(filteredArray));
     }
   };
-
   useEffect(() => {
     const maxIngredient = 20;
     const newArrI = [];
@@ -97,7 +92,6 @@ export default function RecipeInProgressFood() {
       setIngredientsQntd([...newArrQ].filter(Boolean));
     }
   }, [recipe, type]);
-
   const handleCheck = ({ target: { checked, id: ide } }, index) => {
     if (!checked) {
       document
@@ -119,7 +113,6 @@ export default function RecipeInProgressFood() {
     const savedRecipe = JSON.parse(localStorage.getItem('stepsChecked'));
     setSavedCheckbox(savedRecipe[recipeId]);
   };
-
   const handleShare = () => {
     const FIVE = 5;
     const url = window.location.href.split('/', FIVE).join('/');
@@ -131,12 +124,10 @@ export default function RecipeInProgressFood() {
     setFavRecipe();
     verifyFavoriteLocalStorage();
   };
-
   useEffect(() => {
     fetchingData();
     verifyFavoriteLocalStorage();
   }, [fetchingData, recipe, verifyFavoriteLocalStorage]);
-
   return (
     <div className="">
       { recipe && (

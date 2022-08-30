@@ -11,6 +11,13 @@ function Foods({ location: { pathname } }) {
   const [filtersOn, setFiltersOn] = useState(false);
   const { meals } = apiResponse;
   useEffect(() => {
+    if (!localStorage
+      .getItem('inProgressRecipes')) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify({
+        cocktails: {},
+        meals: {},
+      }));
+    }
     const fetchRecipes = async () => {
       const request = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       const json = await request.json();
