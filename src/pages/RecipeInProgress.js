@@ -5,7 +5,7 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/RecipeInProgress.css';
-import { setLocalStorageFavorite } from '../services/setKeys';
+import { setLocalStorageFavorite, setLocalStorageRecipeObj } from '../services/setKeys';
 
 const copy = require('clipboard-copy');
 
@@ -120,6 +120,28 @@ export default function RecipeInProgress() {
     copy(`${url}`);
   };
 
+  const setDoneRecipe = () => {
+    const doneRecipes = {
+      id,
+      type: (type === 'foods' ? 'food' : 'drink'),
+      nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
+      category: (type === 'foods'
+        ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
+      alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
+      name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
+      image: (type === 'foods'
+        ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
+      doneDate: '',
+      tags: [(type === 'foods' ? recipe.meals[0].strTags : recipe.drinks[0].strTags)],
+    };
+    setLocalStorageRecipeObj(doneRecipes);
+  };
+
+  const handleClick = () => {
+    setDoneRecipe();
+    history.push('/done-recipes');
+  };
+
   const addFavoriteRecipe = () => {
     setFavRecipe();
     verifyFavoriteLocalStorage();
@@ -197,7 +219,6 @@ export default function RecipeInProgress() {
                   src={ shareIcon }
                   alt="share"
                 />
-
                 Compartilhar
               </button>
               {showCopyMsg && <h4>Link copied!</h4>}
@@ -211,13 +232,12 @@ export default function RecipeInProgress() {
                   src={ favIcon }
                   alt="favorite"
                 />
-
                 Favoritar
               </button>
               <button
                 type="button"
                 data-testid="finish-recipe-btn"
-                onClick={ () => history.push('/done-recipes') }
+                onClick={ handleClick }
                 disabled={ ingredients.length !== Object.keys(savedCheckbox).length }
               >
                 Finish Recipe

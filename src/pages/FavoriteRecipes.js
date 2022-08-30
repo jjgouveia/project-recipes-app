@@ -19,7 +19,6 @@ export default function FavoriteRecipes() {
 
   const getFavoriteRecipes = () => {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
-    console.log(favoriteRecipes);
   };
 
   const redirectToDetails = (type, id) => {
@@ -31,6 +30,19 @@ export default function FavoriteRecipes() {
   //   favorite.id !== favoriteId));
   // setFavoriteRecipes(filteredFavorites);
   // };
+
+  const filterRecipes = ({ target: { innerHTML } }) => {
+    console.log(innerHTML);
+    if (innerHTML === 'All') {
+      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
+    } else if (innerHTML === 'Food') {
+      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
+        .filter((recipe) => recipe.type === 'food') || []);
+    } else {
+      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
+        .filter((recipe) => recipe.type === 'drink') || []);
+    }
+  };
 
   const removeFavorite = (favoriteId) => {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
@@ -53,18 +65,24 @@ export default function FavoriteRecipes() {
         <button
           type="button"
           data-testid="filter-by-all-btn"
+          onClick={ filterRecipes }
+
         >
           All
         </button>
         <button
           type="button"
           data-testid="filter-by-food-btn"
+          onClick={ filterRecipes }
+
         >
           Food
         </button>
         <button
           type="button"
           data-testid="filter-by-drink-btn"
+          onClick={ filterRecipes }
+
         >
           Drinks
         </button>

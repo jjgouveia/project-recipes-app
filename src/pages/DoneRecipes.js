@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import DoneRecipeButton from '../components/DoneRecipeButton';
 import Header from '../components/Header';
 
 export default function DoneRecipes() {
-  const history = useHistory();
   const [doneRecipes, setDoneRecipes] = useState([]);
   const getDoneRecipes = () => {
     setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes')) || []);
@@ -19,20 +17,15 @@ export default function DoneRecipes() {
     </h3>));
 
   const filterRecipes = ({ target: { innerHTML } }) => {
-    console.log(innerHTML);
     if (innerHTML === 'All') {
-      setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes')) || []);
+      setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes')));
     } else if (innerHTML === 'Food') {
       setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes'))
-        .filter((recipe) => recipe.type === 'food') || []);
+        .filter((recipe) => recipe.type === 'food'));
     } else {
       setDoneRecipes(JSON.parse(localStorage.getItem('doneRecipes'))
-        .filter((recipe) => recipe.type === 'drink') || []);
+        .filter((recipe) => recipe.type === 'drink'));
     }
-  };
-
-  const redirectToDetails = (type, id) => {
-    history.push(`/${type}s/${id}`);
   };
 
   useEffect(() => {
@@ -67,72 +60,60 @@ export default function DoneRecipes() {
       {doneRecipes.map((recipe, index) => (
         recipe.type === 'food' ? (
           <div key={ recipe.name }>
-            <div
-              onClick={ () => redirectToDetails(recipe.type, recipe.id) }
-              onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
-              role="button"
-              tabIndex={ 0 }
-            >
-              <img
-                alt="foto-receita"
-                data-testid={ `${index}-horizontal-image` }
-                src={ recipe.image }
-                style={ { width: '200px' } }
-              />
-              <h3 data-testid={ `${index}-horizontal-top-text` }>
-                {recipe.nationality}
-                {' '}
-                -
-                {' '}
-                {recipe.category}
-              </h3>
-            </div>
-            <div
-              onClick={ () => redirectToDetails(recipe.type, recipe.id) }
-              onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
-              role="button"
-              tabIndex={ 0 }
-            >
-              <h2
-                data-testid={ `${index}-horizontal-name` }
-              >
-                {recipe.name}
-              </h2>
-            </div>
+            <a href={ `http://localhost:3000/${recipe.type}s/${recipe.id}` }>
+              <div>
+                <img
+                  alt="foto-receita"
+                  data-testid={ `${index}-horizontal-image` }
+                  src={ recipe.image }
+                  style={ { width: '200px' } }
+                />
+                <h3 data-testid={ `${index}-horizontal-top-text` }>
+                  {recipe.nationality}
+                  {' '}
+                  -
+                  {' '}
+                  {recipe.category}
+                </h3>
+              </div>
+            </a>
+            <a href={ `http://localhost:3000/${recipe.type}s/${recipe.id}` }>
+              <div>
+                <h2
+                  data-testid={ `${index}-horizontal-name` }
+                >
+                  {recipe.name}
+                </h2>
+              </div>
+            </a>
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <DoneRecipeButton recipe={ recipe } index={ index } />
             {showTags(recipe, index)}
           </div>
         ) : (
           <div key={ `${recipe.name}123` }>
-            <div
-              onClick={ () => redirectToDetails(recipe.type, recipe.id) }
-              onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
-              role="button"
-              tabIndex={ 0 }
-            >
-              <img
-                alt="foto-receita"
-                data-testid={ `${index}-horizontal-image` }
-                src={ recipe.image }
-                style={ { width: '200px' } }
-              />
-            </div>
+            <a href={ `http://localhost:3000/${recipe.type}s/${recipe.id}` }>
+              <div>
+                <img
+                  alt="foto-receita"
+                  data-testid={ `${index}-horizontal-image` }
+                  src={ recipe.image }
+                  style={ { width: '200px' } }
+                />
+              </div>
+            </a>
             <h3 data-testid={ `${index}-horizontal-top-text` }>
               {recipe.alcoholicOrNot}
             </h3>
-            <div
-              onClick={ () => redirectToDetails(recipe.type, recipe.id) }
-              onKeyDown={ () => redirectToDetails(recipe.type, recipe.id) }
-              role="button"
-              tabIndex={ 0 }
-            >
-              <h2
-                data-testid={ `${index}-horizontal-name` }
-              >
-                {recipe.name}
-              </h2>
-            </div>
+            <a href={ `http://localhost:3000/${recipe.type}s/${recipe.id}` }>
+              <div>
+                <h2
+                  data-testid={ `${index}-horizontal-name` }
+                >
+                  {recipe.name}
+                </h2>
+              </div>
+            </a>
             <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
             <DoneRecipeButton recipe={ recipe } index={ index } />
             {showTags(recipe, index)}
