@@ -7,6 +7,9 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 export default function FavoriteRecipes() {
   const history = useHistory();
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [favoriteRecipesFake, setFavoriteRecipesFake] = useState([]);
+
   const [favIcon] = useState(blackHeartIcon);
   const [showCopyMsg, setShowCopyMsg] = useState(false);
 
@@ -66,7 +69,6 @@ export default function FavoriteRecipes() {
           type="button"
           data-testid="filter-by-all-btn"
           onClick={ filterRecipes }
-
         >
           All
         </button>
@@ -74,7 +76,6 @@ export default function FavoriteRecipes() {
           type="button"
           data-testid="filter-by-food-btn"
           onClick={ filterRecipes }
-
         >
           Food
         </button>
@@ -82,12 +83,11 @@ export default function FavoriteRecipes() {
           type="button"
           data-testid="filter-by-drink-btn"
           onClick={ filterRecipes }
-
         >
           Drinks
         </button>
       </div>
-      {favoriteRecipes.map((recipe, index) => (
+      {(loading ? favoriteRecipes : favoriteRecipesFake).map((recipe, index) => (
         recipe.type === 'food' ? (
           <div key={ recipe.name }>
             <div key={ recipe.name }>
