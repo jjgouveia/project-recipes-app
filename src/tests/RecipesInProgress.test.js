@@ -12,6 +12,9 @@ import {
    } from './helpers/mockData';
 
 describe('Testa a renderização e comportamento da página de receitas em progresso', () => {
+beforeEach(() => global.document.execCommand = () => Promise.resolve({})
+)
+
 
 afterEach(() => {
     jest.clearAllMocks();
