@@ -24,29 +24,24 @@ export default function FavoriteRecipes() {
     setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
   };
 
-  const redirectToDetails = (type, id) => {
-    history.push(`/${type}s/${id}`);
+  const foodFilter = () => {
+    const food = favoriteRecipes.filter((elemento) => elemento.type !== 'drink');
+    setFavoriteRecipesFake(food);
+    setLoading(false);
   };
 
-  // const removeFavorite = (favoriteId) => {
-  // const filteredFavorites = favoriteRecipes.filter((favorite) => (
-  //   favorite.id !== favoriteId));
-  // setFavoriteRecipes(filteredFavorites);
-  // };
+  const drinkFilter = () => {
+    const drink = favoriteRecipes.filter((elemento) => elemento.type !== 'food');
+    setFavoriteRecipesFake(drink);
+    setLoading(false);
+  };
 
-  console.log(setLoading, setFavoriteRecipesFake);
+  const allFilter = () => {
+    setLoading(true);
+  };
 
-  const filterRecipes = ({ target: { innerHTML } }) => {
-    console.log(innerHTML);
-    if (innerHTML === 'All') {
-      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
-    } else if (innerHTML === 'Food') {
-      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
-        .filter((recipe) => recipe.type === 'food') || []);
-    } else {
-      setFavoriteRecipes(JSON.parse(localStorage.getItem('favoriteRecipes'))
-        .filter((recipe) => recipe.type === 'drink') || []);
-    }
+  const redirectToDetails = (type, id) => {
+    history.push(`/${type}s/${id}`);
   };
 
   const removeFavorite = (favoriteId) => {
@@ -70,21 +65,21 @@ export default function FavoriteRecipes() {
         <button
           type="button"
           data-testid="filter-by-all-btn"
-          onClick={ filterRecipes }
+          onClick={ allFilter }
         >
           All
         </button>
         <button
           type="button"
           data-testid="filter-by-food-btn"
-          onClick={ filterRecipes }
+          onClick={ foodFilter }
         >
           Food
         </button>
         <button
           type="button"
           data-testid="filter-by-drink-btn"
-          onClick={ filterRecipes }
+          onClick={ drinkFilter }
         >
           Drinks
         </button>

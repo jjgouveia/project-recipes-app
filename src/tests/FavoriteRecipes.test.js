@@ -522,4 +522,213 @@ describe('Verifica a renderização da tela de receitas concluídas', () => {
     
 
    });
+   test('Verifica se os cards de receitas feitas são renderizados', async () => {
+
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "52771",
+        "type": "food",
+        "nationality": "Italian",
+        "category": "Vegetarian",
+        "alcoholicOrNot": "",
+        "name": "Spicy Arrabiata Penne",
+        "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+        "doneDate": "",
+        "tags": [
+            "Pasta,Curry"
+        ]
+    },
+    {
+        "id": "178319",
+        "type": "drink",
+        "nationality": "",
+        "category": "Cocktail",
+        "alcoholicOrNot": "Alcoholic",
+        "name": "Aquamarine",
+        "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+        "doneDate": "",
+        "tags": [
+            null
+        ]
+    }]));
+
+     const { history } = renderWithRouter(<FavoriteRecipes />, '/favorite-recipes');
+
+     history.push('/favorite-recipes');
+   
+     
+    
+    const allbtn = screen.getByTestId('filter-by-all-btn')
+    expect(allbtn).toBeInTheDocument()
+    userEvent.click(allbtn)
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "52771",
+        "type": "food",
+        "nationality": "Italian",
+        "category": "Vegetarian",
+        "alcoholicOrNot": "",
+        "name": "Spicy Arrabiata Penne",
+        "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+        "doneDate": "",
+        "tags": [
+            "Pasta,Curry"
+        ]
+    },
+    {
+        "id": "178319",
+        "type": "drink",
+        "nationality": "",
+        "category": "Cocktail",
+        "alcoholicOrNot": "Alcoholic",
+        "name": "Aquamarine",
+        "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+        "doneDate": "",
+        "tags": [
+            null
+        ]
+    }]));
+
+    const foodsbtn = screen.getByTestId('filter-by-food-btn')
+    expect(foodsbtn).toBeInTheDocument()
+    userEvent.click(foodsbtn)
+    localStorage.clear()
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "52771",
+        "type": "food",
+        "nationality": "Italian",
+        "category": "Vegetarian",
+        "alcoholicOrNot": "",
+        "name": "Spicy Arrabiata Penne",
+        "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+        "doneDate": "",
+        "tags": [
+            "Pasta,Curry"
+        ]
+    }]));
+
+    const drinksbtn = screen.getByTestId('filter-by-drink-btn')
+    expect(drinksbtn).toBeInTheDocument()
+    userEvent.click(drinksbtn)
+    localStorage.clear()
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "178319",
+        "type": "drink",
+        "nationality": "",
+        "category": "Cocktail",
+        "alcoholicOrNot": "Alcoholic",
+        "name": "Aquamarine",
+        "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+        "doneDate": "",
+        "tags": [
+            null
+        ]
+    }]));
+    userEvent.click(allbtn)
+   
    });
+
+   test('Verifica se os cards de receitas feitas são renderizados', async () => {
+
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "52771",
+        "type": "food",
+        "nationality": "Italian",
+        "category": "Vegetarian",
+        "alcoholicOrNot": "",
+        "name": "Spicy Arrabiata Penne",
+        "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+        "doneDate": "",
+        "tags": [
+            "Pasta,Curry"
+        ]
+    },
+    {
+        "id": "178319",
+        "type": "drink",
+        "nationality": "",
+        "category": "Cocktail",
+        "alcoholicOrNot": "Alcoholic",
+        "name": "Aquamarine",
+        "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+        "doneDate": "",
+        "tags": [
+            null
+        ]
+    }]));
+
+     const { history } = renderWithRouter(<FavoriteRecipes />, '/favorite-recipes');
+
+     history.push('/favorite-recipes');
+   
+     
+    
+    const allbtn = screen.getByTestId('filter-by-all-btn')
+    expect(allbtn).toBeInTheDocument()
+    userEvent.click(allbtn)
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "52771",
+        "type": "food",
+        "nationality": "Italian",
+        "category": "Vegetarian",
+        "alcoholicOrNot": "",
+        "name": "Spicy Arrabiata Penne",
+        "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+        "doneDate": "",
+        "tags": [
+            "Pasta,Curry"
+        ]
+    },
+    {
+        "id": "178319",
+        "type": "drink",
+        "nationality": "",
+        "category": "Cocktail",
+        "alcoholicOrNot": "Alcoholic",
+        "name": "Aquamarine",
+        "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+        "doneDate": "",
+        "tags": [
+            null
+        ]
+    }]));
+
+    const foodsbtn = screen.getByTestId('filter-by-food-btn')
+    expect(foodsbtn).toBeInTheDocument()
+    userEvent.click(foodsbtn)
+    localStorage.clear()
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "52771",
+        "type": "food",
+        "nationality": "Italian",
+        "category": "Vegetarian",
+        "alcoholicOrNot": "",
+        "name": "Spicy Arrabiata Penne",
+        "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+        "doneDate": "",
+        "tags": [
+            "Pasta,Curry"
+        ]
+    }]));
+
+    const drinksbtn = screen.getByTestId('filter-by-drink-btn')
+    expect(drinksbtn).toBeInTheDocument()
+    userEvent.click(drinksbtn)
+    localStorage.clear()
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        "id": "178319",
+        "type": "drink",
+        "nationality": "",
+        "category": "Cocktail",
+        "alcoholicOrNot": "Alcoholic",
+        "name": "Aquamarine",
+        "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+        "doneDate": "",
+        "tags": [
+            null
+        ]
+    }]));
+    const unlike = screen.getByTestId('0-horizontal-favorite-btn')
+    userEvent.click(unlike)
+    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+   
+   });
+});
