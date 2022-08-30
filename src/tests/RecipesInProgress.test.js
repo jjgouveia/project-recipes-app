@@ -279,8 +279,7 @@ afterEach(() => {
           userEvent.click(screen.getByTestId('2-ingredient-step'));
           
           userEvent.click(finishBtn)
-          const { pathname } = history.location;
-          expect(pathname).toBe('/done-recipes');
+       
           
         });
 
