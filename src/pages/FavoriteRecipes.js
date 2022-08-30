@@ -34,6 +34,8 @@ export default function FavoriteRecipes() {
   // setFavoriteRecipes(filteredFavorites);
   // };
 
+  console.log(setLoading, setFavoriteRecipesFake);
+
   const filterRecipes = ({ target: { innerHTML } }) => {
     console.log(innerHTML);
     if (innerHTML === 'All') {
