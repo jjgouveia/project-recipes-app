@@ -5,11 +5,11 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/RecipeInProgress.css';
-import { setLocalStorageFavorite } from '../services/setKeys';
+import { setLocalStorageFavorite, setLocalStorageRecipeObj } from '../services/setKeys';
 
 const copy = require('clipboard-copy');
 
-export default function RecipeInProgressFood() {
+export default function RecipeInProgress() {
   const history = useHistory();
   const { id } = useParams();
   const [recipeId, setRecipeId] = useState(0);
@@ -23,9 +23,7 @@ export default function RecipeInProgressFood() {
   const favorites = useMemo(() => (localStorage
     .getItem('favoriteRecipes')
     ? JSON.parse(localStorage.getItem('favoriteRecipes')) : []), []);
-
   const type = location.pathname.split('/')[1];
-
   const fetchingData = useCallback(async () => {
     if (type === 'foods') {
       setRecipe(await fetchContent(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`));
@@ -33,7 +31,22 @@ export default function RecipeInProgressFood() {
       setRecipe(await fetchContent(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`));
     }
   }, [id, type]);
-
+  const setDoneRecipe = () => {
+    const doneRecipes = {
+      id,
+      type: (type === 'foods' ? 'food' : 'drink'),
+      nationality: (type === 'foods' ? recipe.meals[0].strArea : ''),
+      category: (type === 'foods'
+        ? recipe.meals[0].strCategory : recipe.drinks[0].strCategory),
+      alcoholicOrNot: (type === 'foods' ? '' : recipe.drinks[0].strAlcoholic),
+      name: (type === 'foods' ? recipe.meals[0].strMeal : recipe.drinks[0].strDrink),
+      image: (type === 'foods'
+        ? recipe.meals[0].strMealThumb : recipe.drinks[0].strDrinkThumb),
+      doneDate: '',
+      tags: [(type === 'foods' ? recipe.meals[0].strTags : recipe.drinks[0].strTags)],
+    };
+    setLocalStorageRecipeObj(doneRecipes);
+  };
   useEffect(() => {
     setRecipeId(id);
     if (!localStorage.getItem('stepsChecked')) {
@@ -45,7 +58,6 @@ export default function RecipeInProgressFood() {
       setSavedCheckbox(savedRecipe[id]);
     }
   }, [id]);
-
   const verifyFavoriteLocalStorage = useCallback(() => {
     const favoritesArray = localStorage.getItem('favoriteRecipes')
       ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
@@ -56,7 +68,6 @@ export default function RecipeInProgressFood() {
       setFavIcon(whiteHeartIcon);
     }
   }, [id]);
-
   const setFavRecipe = () => {
     if (favIcon === whiteHeartIcon) {
       const favoriteRecipe = {
@@ -76,7 +87,6 @@ export default function RecipeInProgressFood() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(filteredArray));
     }
   };
-
   useEffect(() => {
     const maxIngredient = 20;
     const newArrI = [];
@@ -97,7 +107,6 @@ export default function RecipeInProgressFood() {
       setIngredientsQntd([...newArrQ].filter(Boolean));
     }
   }, [recipe, type]);
-
   const handleCheck = ({ target: { checked, id: ide } }, index) => {
     if (!checked) {
       document
@@ -119,15 +128,14 @@ export default function RecipeInProgressFood() {
     const savedRecipe = JSON.parse(localStorage.getItem('stepsChecked'));
     setSavedCheckbox(savedRecipe[recipeId]);
   };
-
   const handleShare = () => {
     const FIVE = 5;
     const url = window.location.href.split('/', FIVE).join('/');
     setShowCopyMsg(true);
     copy(`${url}`);
   };
-
   const handleFinish = () => {
+    setDoneRecipe();
     history.push('/done-recipes');
   };
 
@@ -135,12 +143,10 @@ export default function RecipeInProgressFood() {
     setFavRecipe();
     verifyFavoriteLocalStorage();
   };
-
   useEffect(() => {
     fetchingData();
     verifyFavoriteLocalStorage();
   }, [fetchingData, recipe, verifyFavoriteLocalStorage]);
-
   return (
     <div className="">
       { recipe && (
