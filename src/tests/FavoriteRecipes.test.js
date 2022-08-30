@@ -69,6 +69,7 @@ describe('Verifica a renderização da tela de receitas concluídas', () => {
      expect(screen.getAllByTestId(/horizontal-share-btn/i).length).toBe(2);
      const unlike = screen.getByTestId('0-horizontal-favorite-btn')
      userEvent.click(unlike)
+     localStorage.clear()
      localStorage.setItem('favoriteRecipes', JSON.stringify([
     {
         "id": "178319",
