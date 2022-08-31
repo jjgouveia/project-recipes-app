@@ -102,10 +102,10 @@ export default function RecipeInProgress() {
     } else {
       document
         .getElementById(ide).className = 'checked';
-      if (!localStorage.getItem('stepsChecked')) {
-        localStorage
-          .setItem('stepsChecked', JSON.stringify({ [recipeId]: { [index]: true } }));
-      }
+      // if (!localStorage.getItem('stepsChecked')) {
+      //   localStorage
+      //     .setItem('stepsChecked', JSON.stringify({ [recipeId]: { [index]: true } }));
+      // }
       const savedRecipe = JSON.parse(localStorage.getItem('stepsChecked'));
       localStorage.setItem('stepsChecked',
         JSON.stringify({ [recipeId]: { [index]: true, ...savedRecipe[recipeId] } }));

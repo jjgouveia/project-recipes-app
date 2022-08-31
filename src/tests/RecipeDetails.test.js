@@ -44,6 +44,9 @@ describe('Verifica renderização  da página de detalhes de bebid', () => {
     });
 
 describe('Verifica renderização da página de detalhes de Comida', () => {
+
+
+
     beforeEach(() => {
         fetch = jest.fn().mockImplementation((url) => {
             if (url == 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52844') {
@@ -115,29 +118,8 @@ describe('Verifica renderização da página de detalhes de Comida', () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalled();
   });
 
-  it('Verifica se é gerada uma chave no localStorage caso não exista', async ()  => {
-    const { history } = renderWithRouter(<App />);
-
-
-
-    
-    history.push('/foods/52844');
-    
-    await waitFor(() => expect(fetch).toBeCalled());
-    await waitFor(() => expect(fetch).toBeCalled());
-
-    history.push('/foods/52844');
-
-    expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument();
-
-  });
-
   it('Verifica o comportamento ao clicar no botão "Start Recipe"', async ()  => {
 
-
-//    renderWithRouter(<App />);
-
-
     const { history } = renderWithRouter(<App />);
 
     history.push('/foods/52844');
@@ -146,29 +128,29 @@ describe('Verifica renderização da página de detalhes de Comida', () => {
     await waitFor(() => expect(fetch).toBeCalled());
     
 
-    const oldRecipe = JSON.stringify({
-        meals: {
-          '53026': [
-            'Broad Beans',
-            'Spring Onions',
-            'Garlic Clove',
-            'Parsley',
-            'Cumin',
-            'Baking Powder',
-            'Cayenne Pepper',
-            'Flour',
-            'Vegetable Oil'
-          ]
-        }
-      });
+    // const oldRecipe = JSON.stringify({
+    //     meals: {
+    //       '53026': [
+    //         'Broad Beans',
+    //         'Spring Onions',
+    //         'Garlic Clove',
+    //         'Parsley',
+    //         'Cumin',
+    //         'Baking Powder',
+    //         'Cayenne Pepper',
+    //         'Flour',
+    //         'Vegetable Oil'
+    //       ]
+    //     }
+    //   });
 
-      localStorage.setItem('inProgressRecipes', oldRecipe);
+    //   localStorage.setItem('inProgressRecipes', oldRecipe);
 
     expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument();
     userEvent.click(screen.getByTestId('start-recipe-btn'));
   });
   it('Verifica o comportamento ao clicar no botão "Continuar Receita"', async ()  => {
-        const { history } = renderWithRouter(<App />);
+        const { history } = renderWithRouter(<App />, '/foods/52844');
 
         const oldRecipe = JSON.stringify({
             meals: {
@@ -201,18 +183,18 @@ describe('Verifica renderização da página de detalhes de Comida', () => {
         const { history } = renderWithRouter(<App />);
 
         const doneRecipe = JSON.stringify([{
-            "id": "52844",
-            "type": "food",
-            "nationality": "Italian",
-            "category": "Pasta",
-            "alcoholicOrNot": "",
-            "name": "Lasagne",
-            "image": "https://www.themealdb.com/images/media/meals/wtsvxx1511296896.jpg",
-            "doneDate": "",
-            "tags": [
-                null
-            ]
-        }]);
+          "id": "52844",
+          "type": "food",
+          "nationality": "Italian",
+          "category": "Pasta",
+          "alcoholicOrNot": "",
+          "name": "Lasagne",
+          "image": "https://www.themealdb.com/images/media/meals/wtsvxx1511296896.jpg",
+          "doneDate": "",
+          "tags": [
+              null
+          ]
+      }]);
     
           localStorage.setItem('doneRecipes', doneRecipe);
     
@@ -220,8 +202,12 @@ describe('Verifica renderização da página de detalhes de Comida', () => {
         
         await waitFor(() => expect(fetch).toBeCalled());
         await waitFor(() => expect(fetch).toBeCalled());
+
+        expect(screen.queryByText(/continue recipe/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/start recipe/i)).not.toBeInTheDocument();
+
       });
-      it('Verifica se não existe botão de iniciar ou continuar receita caso ela já tenha sido finalizada"', async ()  => {
+      it('Veria"', async ()  => {
         const { history } = renderWithRouter(<App />);
 
         const favorites = JSON.stringify([{
@@ -241,7 +227,66 @@ describe('Verifica renderização da página de detalhes de Comida', () => {
         await waitFor(() => expect(fetch).toBeCalled());
         await waitFor(() => expect(fetch).toBeCalled());
       });
+      it('Verifica se é gerada uma chave no localStorage caso não exista', async ()  => {
+        const { history } = renderWithRouter(<App />);
+        localStorage.removeItem('inProgressRecipes')
+        localStorage.removeItem('doneRecipes')
+
+        console.log('====================================');
+        console.log(localStorage.getItem('inProgressRecipes'));
+        console.log('====================================');
+        history.push('/foods/52844');
+
+        
+        
+        await waitFor(() => expect(fetch).toBeCalled());
+        await waitFor(() => expect(fetch).toBeCalled());
+        
+        
+        console.log(localStorage.getItem('inProgressRecipes'));
+    
+        expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument();
+        userEvent.click(screen.getByTestId('start-recipe-btn'));
+        console.log(localStorage.getItem('inProgressRecipes'));
+      });
 })
+
+ describe('Testa os comportamentos funcionais da página de detalhes dos drinks', () => { 
+  it('Teste os detalhes da Aquamarine ', async ()  => {
+    fetch = jest.fn().mockImplementation((url) => {
+      if (url == 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319') {
+        return Promise.resolve({
+          json: jest.fn().mockResolvedValue(mockDrinkWithId)
+        })
+      } else {
+        return Promise.resolve({
+          json: jest.fn().mockResolvedValue(foodsRecomendation)
+        })
+      }
+    });
+    const { history } = renderWithRouter(<App />,);
+
+    history.push('/drinks/178319');
+
+
+    await waitFor(() => expect(fetch).toBeCalled());
+
+    expect(screen.getByTestId('recipe-photo').src).toBe("https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg");
+    expect(screen.getByTestId('recipe-title').innerHTML).toBe('Aquamarine');
+    expect(screen.getByTestId('recipe-category').innerHTML).toBe('Alcoholic');
+    expect(screen.getAllByTestId(/ingredient-name-and-measure/i).length).toBe(3);
+    expect(screen.getByTestId('instructions')).toBeInTheDocument();
+    expect(screen.getAllByTestId(/recomendation-card/i).length).toBe(6);
+
+    expect(screen.queryByText(/start recipe/i)).toBeInTheDocument();
+
+    expect(screen.getByTestId('favorite-btn')).toBeInTheDocument();
+    userEvent.click(screen.getByTestId('favorite-btn'));
+    userEvent.click(screen.getByTestId('favorite-btn'));
+
+    userEvent.click(screen.queryByText(/start recipe/i));
+  });
+  })
 
 
 
