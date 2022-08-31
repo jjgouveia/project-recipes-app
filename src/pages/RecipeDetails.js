@@ -92,13 +92,19 @@ export default function RecipeDetails() {
     }
   }; const handleStartRecipe = () => {
     const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
-    const inProgressRecipes = localStorage.getItem('inProgressRecipes');
+    const inProgressRecipes = localStorage.getItem('inProgressRecipes')
+      ? JSON.parse(localStorage.getItem('inProgressRecipes')) : [];
     let newInProgressRecipe = {};
-    newInProgressRecipe = {
-      ...inProgressRecipes,
-      [mealsOrCocktails]: { [id]: ingredients },
-    };
-
+    if (inProgressRecipes) {
+      newInProgressRecipe = {
+        ...inProgressRecipes,
+        [mealsOrCocktails]: { [id]: ingredients },
+      };
+    } else {
+      newInProgressRecipe = {
+        [mealsOrCocktails]: { [id]: ingredients },
+      };
+    }
     localStorage.setItem(
       'inProgressRecipes', JSON.stringify(newInProgressRecipe),
     );
