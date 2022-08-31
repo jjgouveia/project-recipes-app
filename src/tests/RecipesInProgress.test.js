@@ -20,7 +20,7 @@ describe('Testa a renderização e comportamento da página de receitas em progr
     jest.clearAllMocks();
   });
 
-test('Verifica se os detalhes renderizados para uma receita na rota "foods"', async () => {
+test('Verifica os detalhes renderizados para uma receita na rota "foods"', async () => {
 
     fetch = jest.fn().mockImplementation((url) => {
       if (url == 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52771') {
@@ -87,7 +87,7 @@ test('Verifica se os detalhes renderizados para uma receita na rota "foods"', as
   });
 
 
-test('Verifica se os detalhes renderizados para uma receita na rota "drinks" 1', async () => {
+test('Verifica os detalhes renderizados para uma receita na rota "drinks" 1', async () => {
 
     fetch = jest.fn().mockImplementation((url) => {
       if (url == 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319') {
@@ -182,7 +182,7 @@ test('Verifica se os detalhes renderizados para uma receita na rota "drinks" 1',
 
   });
 
-test('Verifica se os detalhes renderizados para uma receita na rota "drinks" 3', async () => {
+test('Verifica os detalhes renderizados para uma receita na rota "drinks" 3', async () => {
 
     fetch = jest.fn().mockImplementation((url) => {
       if (url == 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319') {
@@ -221,7 +221,7 @@ test('Verifica se os detalhes renderizados para uma receita na rota "drinks" 3',
     expect(await screen.findByText('Link copied!')).toBeInTheDocument()
   });
 
-  test('Verifica se os detalhes renderizados para uma receita na rota "drinks" 4', async () => {
+  test('Verifica os detalhes renderizados para uma receita na rota "drinks" 4', async () => {
 
     fetch = jest.fn().mockImplementation((url) => {
       if (url == 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319') {
