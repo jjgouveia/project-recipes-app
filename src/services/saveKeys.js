@@ -5,7 +5,6 @@ export default function saveKeys() {
     .getItem('cocktailsToken')) localStorage.setItem('cocktailsToken', '');
   if (!localStorage
     .getItem('doneRecipes')) localStorage.setItem('doneRecipes', []);
-
   if (!localStorage
     .getItem('favoriteRecipes')) localStorage.setItem('favoriteRecipes', []);
 }
