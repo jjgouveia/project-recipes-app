@@ -92,9 +92,7 @@ export default function RecipeDetails() {
     }
   }; const handleStartRecipe = () => {
     const mealsOrCocktails = verifyRoute ? 'meals' : 'cocktails';
-    const inProgressRecipes = localStorage.getItem('inProgressRecipes')
-      ? JSON.parse(localStorage.getItem('inProgressRecipes'))
-      : [];
+    const inProgressRecipes = localStorage.getItem('inProgressRecipes');
     let newInProgressRecipe = {};
     newInProgressRecipe = {
       ...inProgressRecipes,

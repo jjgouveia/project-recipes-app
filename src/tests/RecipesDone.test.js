@@ -130,8 +130,5 @@ describe('Verifica a renderização da tela de receitas concluídas', () => {
 
     expect(screen.getAllByTestId(/horizontal-image/i).length).toBe(2);
     expect(screen.getAllByTestId(/horizontal-top-text/i).length).toBe(2);
-
-   /*  userEvent.click(screen.getAllByTestId(/horizontal-share-btn/i)[0]);
-    expect(screen.getAllByText("Link copied!")[0]).toBeInTheDocument(); */
    });
    });
