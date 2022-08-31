@@ -131,4 +131,56 @@ describe('Verifica a renderização da tela de receitas concluídas', () => {
     expect(screen.getAllByTestId(/horizontal-image/i).length).toBe(2);
     expect(screen.getAllByTestId(/horizontal-top-text/i).length).toBe(2);
    });
+   test('Verifica se o food, drinks e all funcionam corretamente e o botão compartilhar', () => {
+
+    Object.assign(navigator, {
+        clipboard: {
+          writeText: () => {},
+        },
+      });
+
+    localStorage.setItem('doneRecipes', JSON.stringify([{
+        "id": "52771",
+        "type": "food",
+        "nationality": "Italian",
+        "category": "Vegetarian",
+        "alcoholicOrNot": "",
+        "name": "Spicy Arrabiata Penne",
+        "image": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg",
+        "doneDate": "",
+        "tags": [
+            "Pasta,Curry"
+        ]
+    },
+    {
+        "id": "178319",
+        "type": "drink",
+        "nationality": "",
+        "category": "Cocktail",
+        "alcoholicOrNot": "Alcoholic",
+        "name": "Aquamarine",
+        "image": "https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg",
+        "doneDate": "",
+        "tags": [
+            null
+        ]
+    }]));
+
+    const { history } = renderWithRouter(<DoneRecipes />);
+
+    history.push('/done-recipes');
+
+    expect(screen.getAllByText(/compartilhar/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/compartilhar/i)[1]).toBeInTheDocument();
+
+    userEvent.click(screen.getAllByText(/compartilhar/i)[0]);
+    userEvent.click(screen.getAllByText(/compartilhar/i)[1]);
+
+
    });
+   });
+
+
+
+//    expect(screen.getByText(/compartilhar/i)).toBeInTheDocument();
+// userEvent.click(screen.queryByText(/compartilhar/i));

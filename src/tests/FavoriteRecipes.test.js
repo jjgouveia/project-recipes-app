@@ -6,6 +6,16 @@ import App from '../App';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
 
 describe('Verifica a renderização da tela de receitas concluídas', () => {
+
+beforeEach(() => {
+    Object.assign(navigator, {
+    clipboard: {
+      writeText: () => {},
+    },
+  });
+}
+)
+
    test('Verifica se o ícone Profile redireciona para a rota /profile', () => {
      const { history } = renderWithRouter(<App />);
 
@@ -728,6 +738,8 @@ describe('Verifica a renderização da tela de receitas concluídas', () => {
     }]));
     const unlike = screen.getByTestId('0-horizontal-favorite-btn')
     userEvent.click(unlike)
+    userEvent.click(unlike)
+
     localStorage.setItem('favoriteRecipes', JSON.stringify([]));
    
    });
